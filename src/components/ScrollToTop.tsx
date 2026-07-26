@@ -8,21 +8,12 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     if (lenis) {
-      lenis.scrollTo(0, { immediate: true });
+      lenis.scrollTo(0, { immediate: false });
     } else {
-      try {
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "instant" as any
-        });
-      } catch (e) {
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "auto"
-        });
-      }
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     }
   }, [pathname, lenis]);
 

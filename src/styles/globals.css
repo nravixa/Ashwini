@@ -424,26 +424,29 @@ img {
     width: 100vw !important;
     height: 100dvh !important;
     max-height: 100dvh !important;
-    background: #1D1A31 !important; /* Preserves brand background */
-    z-index: 99998 !important; /* Just below the close button */
+    background: rgba(29, 26, 49, 0.96) !important; /* Premium dark luxury background */
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    z-index: 99999 !important; /* High z-index */
     margin: 0 !important;
     border: none !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    padding: env(safe-area-inset-top, 80px) 24px env(safe-area-inset-bottom, 120px) 24px !important;
+    padding: calc(env(safe-area-inset-top, 24px) + 72px) 24px calc(env(safe-area-inset-bottom, 24px) + 32px) 24px !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
     align-items: center !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     box-sizing: border-box !important;
+    transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 300ms ease !important;
   }
 
   /* Spacing and layout for navigation links */
   #mobile-menu > a {
-    margin: 16px 0 !important;
-    padding: 4px 12px !important;
+    margin: 8px 0 !important; /* 8px top + 8px bottom = 16px vertical spacing */
+    padding: 12px 24px !important;
     font-size: 1.2rem !important;
     letter-spacing: 0.25em !important;
     text-align: center !important;
@@ -453,6 +456,14 @@ img {
     border-left: 2px solid transparent !important;
     border-right: 2px solid transparent !important;
     width: auto !important;
+    min-height: 48px !important; /* Minimum touch target height */
+    transition: all 0.2s ease !important;
+  }
+
+  #mobile-menu > a:active {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 8px !important;
+    scale: 0.95 !important;
   }
 
   /* Maintain highlight borders with centering balance */
@@ -461,21 +472,19 @@ img {
     border-right: 2px solid transparent !important;
   }
 
-  /* Position CTA and Social icons at the bottom center */
+  /* Position CTA and Social icons relatively in flow to prevent overlap */
   #mobile-menu > div.pt-4 {
-    position: absolute !important;
-    bottom: calc(env(safe-area-inset-bottom, 24px) + 16px) !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+    position: relative !important;
     width: 100% !important;
     max-width: 280px !important;
-    border-top: none !important;
-    padding-top: 0 !important;
-    margin-top: 0 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding-top: 24px !important;
+    margin-top: 24px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     gap: 16px !important;
+    flex-shrink: 0 !important;
   }
 
   #mobile-menu > div.pt-4 > div.flex {
