@@ -234,7 +234,7 @@ Subscriber`;
     reviewsList.map((test, index) => (
       <div
         key={index}
-        className="w-[320px] sm:w-[450px] md:w-[600px] glass-card p-8 md:p-12 shrink-0 whitespace-normal flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02]"
+        className="w-[calc(100vw-48px)] sm:w-[450px] md:w-[600px] glass-card p-8 md:p-12 shrink-0 whitespace-normal flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02]"
       >
         <p className="card-subtitle italic text-white mb-8">
           &ldquo;{test.quote}&rdquo;

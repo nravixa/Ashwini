@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 // Layout & Global Components
 import Navbar from './components/Navbar';
 import Providers from './components/Providers';
+import ScrollToTop from './components/ScrollToTop';
 import PageTransition from './components/animations/PageTransition';
 
 // Simple, luxury-themed page loader fallback
@@ -40,6 +41,7 @@ export default function App() {
 
   return (
     <Providers>
+      <ScrollToTop />
       <Navbar />
       <main className="relative">
         <Suspense fallback={<PageLoader />}>

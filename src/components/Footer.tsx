@@ -54,7 +54,7 @@ export default React.memo(function Footer() {
       <div
         className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-16"
       >
-        <div className="glass-card p-10 md:p-16 rounded-[32px] grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-12">
+        <div className="glass-card p-6 sm:p-10 md:p-16 rounded-[32px] grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-12">
           {/* Logo and About */}
           <div className="space-y-6">
             <h3 className="font-display text-2xl font-bold tracking-tighter text-white uppercase">

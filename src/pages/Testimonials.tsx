@@ -186,7 +186,7 @@ export default function TestimonialsPage() {
                 Submit Your Review
               </h3>
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
                     <label className="font-sans text-xs uppercase tracking-widest text-outline">Name</label>
                     <input
@@ -213,7 +213,7 @@ export default function TestimonialsPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
                     <label className="font-sans text-xs uppercase tracking-widest text-outline">Stylist</label>
                     <select
