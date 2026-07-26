@@ -652,5 +652,31 @@ img {
     width: 100% !important;
     height: 100% !important;
   }
+
+  /* Compact and refined mobile menu layout (≤768px) */
+  #mobile-menu {
+    padding-top: calc(env(safe-area-inset-top, 24px) + 50px) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom, 24px) + 30px) !important;
+  }
+
+  #mobile-menu > .mobile-menu-links > a {
+    font-size: clamp(14px, 2vh, 16px) !important;
+    font-family: var(--font-sans, sans-serif) !important; /* Clean premium sans-serif */
+    font-weight: 300 !important;
+    letter-spacing: 0.18em !important;
+    line-height: 1.8 !important;
+    margin: 4px 0 !important; /* Reduced vertical spacing */
+    padding: 10px 24px !important; /* Safe touch target height */
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Spacing to CTA on mobile */
+  #mobile-menu > div.pt-4 {
+    margin-top: 25px !important; /* Reduced margin */
+    gap: 25px !important; /* Reduced gap between CTA and socials */
+  }
 }
 

@@ -77,7 +77,7 @@ const Navbar = React.memo(function Navbar() {
         >
           <Link to="/"
             onClick={() => handleLinkClick("/")}
-            className="font-display text-base sm:text-lg font-medium tracking-[0.15em] text-white uppercase"
+            className="font-display text-base sm:text-lg font-medium tracking-[0.15em] text-white uppercase md:block hidden"
           >
             ASHWINI SALON
           </Link>
@@ -193,7 +193,7 @@ const Navbar = React.memo(function Navbar() {
             }`}
           >
             {/* Top Section: Centered Logo */}
-            <div className="mobile-menu-logo">
+            <div className="mobile-menu-logo md:block hidden">
               <Link to="/" onClick={() => setIsOpen(false)} className="font-display text-2xl font-bold tracking-widest text-white uppercase">
                 ASHWINI SALON
               </Link>
