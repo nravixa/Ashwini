@@ -107,6 +107,7 @@ const HomePage = React.memo(function HomePage() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [subscribeSuccess, setSubscribeSuccess] = useState(false);
+  const [activePreviewItem, setActivePreviewItem] = useState<string | null>(null);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const isHoveredRef = useRef(false);
@@ -389,17 +390,23 @@ Subscriber`;
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
             {/* Item 1 */}
-            <AnimatedCard index={0} className="relative group overflow-hidden rounded-lg md:col-span-1 md:mt-10">
-              <AnimatedImage className="h-[400px] w-full bg-neutral-900">
+            <AnimatedCard index={0} className="relative group overflow-hidden rounded-lg md:col-span-1 md:mt-10 cursor-pointer" onClick={() => setActivePreviewItem(activePreviewItem === galleryPreview[0].title ? null : galleryPreview[0].title)}>
+              <AnimatedImage className="h-[400px] w-full bg-neutral-900 overflow-hidden">
                 <Image
                   src={galleryPreview[0].imageUrl}
                   alt={galleryPreview[0].title}
                   fill
                   sizes="(max-width: 768px) 100vw, 25vw"
-                  className="object-cover"
+                  className={`object-cover transition-transform duration-700 ease-out ${
+                    activePreviewItem === galleryPreview[0].title ? "scale-105" : "group-hover:scale-105"
+                  }`}
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8" />
-                <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                <div className={`absolute inset-0 bg-black/40 transition-opacity duration-500 flex flex-col justify-end p-8 ${
+                  activePreviewItem === galleryPreview[0].title ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }`} />
+                <div className={`absolute bottom-0 left-0 right-0 p-8 transform transition-all duration-500 ${
+                  activePreviewItem === galleryPreview[0].title ? "translate-y-0 opacity-100" : "translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100"
+                }`}>
                   <span className="text-xs uppercase tracking-[0.25em] text-white/70 block mb-2 font-sans">
                     {galleryPreview[0].category}
                   </span>
@@ -411,17 +418,23 @@ Subscriber`;
             </AnimatedCard>
 
             {/* Item 2 */}
-            <AnimatedCard index={1} className="relative group overflow-hidden rounded-lg md:col-span-2">
-              <AnimatedImage className="h-[440px] w-full bg-neutral-900">
+            <AnimatedCard index={1} className="relative group overflow-hidden rounded-lg md:col-span-2 cursor-pointer" onClick={() => setActivePreviewItem(activePreviewItem === galleryPreview[1].title ? null : galleryPreview[1].title)}>
+              <AnimatedImage className="h-[440px] w-full bg-neutral-900 overflow-hidden">
                 <Image
                   src={galleryPreview[1].imageUrl}
                   alt={galleryPreview[1].title}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
+                  className={`object-cover transition-transform duration-700 ease-out ${
+                    activePreviewItem === galleryPreview[1].title ? "scale-105" : "group-hover:scale-105"
+                  }`}
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8" />
-                <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                <div className={`absolute inset-0 bg-black/40 transition-opacity duration-500 flex flex-col justify-end p-8 ${
+                  activePreviewItem === galleryPreview[1].title ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }`} />
+                <div className={`absolute bottom-0 left-0 right-0 p-8 transform transition-all duration-500 ${
+                  activePreviewItem === galleryPreview[1].title ? "translate-y-0 opacity-100" : "translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100"
+                }`}>
                   <span className="text-xs uppercase tracking-[0.25em] text-white/70 block mb-2 font-sans">
                     {galleryPreview[1].category}
                   </span>
@@ -433,17 +446,23 @@ Subscriber`;
             </AnimatedCard>
 
             {/* Item 3 */}
-            <AnimatedCard index={2} className="relative group overflow-hidden rounded-lg md:col-span-1 md:mt-10">
-              <AnimatedImage className="h-[400px] w-full bg-neutral-900">
+            <AnimatedCard index={2} className="relative group overflow-hidden rounded-lg md:col-span-1 md:mt-10 cursor-pointer" onClick={() => setActivePreviewItem(activePreviewItem === galleryPreview[2].title ? null : galleryPreview[2].title)}>
+              <AnimatedImage className="h-[400px] w-full bg-neutral-900 overflow-hidden">
                 <Image
                   src={galleryPreview[2].imageUrl}
                   alt={galleryPreview[2].title}
                   fill
                   sizes="(max-width: 768px) 100vw, 25vw"
-                  className="object-cover"
+                  className={`object-cover transition-transform duration-700 ease-out ${
+                    activePreviewItem === galleryPreview[2].title ? "scale-105" : "group-hover:scale-105"
+                  }`}
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8" />
-                <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                <div className={`absolute inset-0 bg-black/40 transition-opacity duration-500 flex flex-col justify-end p-8 ${
+                  activePreviewItem === galleryPreview[2].title ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }`} />
+                <div className={`absolute bottom-0 left-0 right-0 p-8 transform transition-all duration-500 ${
+                  activePreviewItem === galleryPreview[2].title ? "translate-y-0 opacity-100" : "translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100"
+                }`}>
                   <span className="text-xs uppercase tracking-[0.25em] text-white/70 block mb-2 font-sans">
                     {galleryPreview[2].category}
                   </span>
