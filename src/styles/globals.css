@@ -361,3 +361,122 @@ img {
     scroll-behavior: auto !important;
   }
 }
+
+/* ========================================================
+   MOBILE FULL-SCREEN NAVIGATION MENU OVERLAY (MAX-WIDTH: 768PX)
+   ======================================================== */
+@media (max-width: 768px) {
+  /* Style navbar container to only show close button when menu is open */
+  nav:has(#mobile-menu) > div {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: auto !important;
+    padding: env(safe-area-inset-top, 24px) 24px 0 24px !important;
+    margin: 0 !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    z-index: 99999 !important; /* Above the mobile menu */
+    pointer-events: none !important;
+  }
+
+  /* Hide elements that are not the close button when menu is open */
+  nav:has(#mobile-menu) > div > a,
+  nav:has(#mobile-menu) > div > div:not(.md:hidden),
+  nav:has(#mobile-menu) > div > div.md:hidden > button:first-child {
+    display: none !important;
+  }
+
+  /* Keep toggle button clickable */
+  nav:has(#mobile-menu) > div > div.md:hidden {
+    pointer-events: auto !important;
+  }
+
+  nav:has(#mobile-menu) button[aria-expanded="true"] {
+    position: relative !important;
+    z-index: 100000 !important;
+    color: var(--color-primary, #F08CAE) !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 8px !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+  }
+
+  /* Mobile full viewport menu */
+  #mobile-menu {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    background: #1D1A31 !important; /* Preserves brand background */
+    z-index: 99998 !important; /* Just below the close button */
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: env(safe-area-inset-top, 80px) 24px env(safe-area-inset-bottom, 120px) 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Spacing and layout for navigation links */
+  #mobile-menu > a {
+    margin: 16px 0 !important;
+    padding: 4px 12px !important;
+    font-size: 1.2rem !important;
+    letter-spacing: 0.25em !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-left: 2px solid transparent !important;
+    border-right: 2px solid transparent !important;
+    width: auto !important;
+  }
+
+  /* Maintain highlight borders with centering balance */
+  #mobile-menu > a.text-primary {
+    border-left: 2px solid var(--color-primary, #F08CAE) !important;
+    border-right: 2px solid transparent !important;
+  }
+
+  /* Position CTA and Social icons at the bottom center */
+  #mobile-menu > div.pt-4 {
+    position: absolute !important;
+    bottom: calc(env(safe-area-inset-bottom, 24px) + 16px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 100% !important;
+    max-width: 280px !important;
+    border-top: none !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 16px !important;
+  }
+
+  #mobile-menu > div.pt-4 > div.flex {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    gap: 24px !important;
+  }
+}
+
