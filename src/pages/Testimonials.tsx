@@ -89,7 +89,7 @@ export default function TestimonialsPage() {
     <main className="pt-32 pb-32">
       <SEO 
         title="Client Testimonials"
-        description="Read what our clients say about their luxury experiences at Elixir Luxury Salon. Unmatched artistry and dedication."
+        description="Read what our clients say about their luxury experiences at Ashwini Salon. Unmatched artistry and dedication."
         canonical="/testimonials"
       />
       {/* Header */}

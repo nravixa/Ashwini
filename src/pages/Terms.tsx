@@ -15,7 +15,7 @@ export default function TermsPage() {
     <main className="pb-32 bg-background text-white">
       <SEO
         title="Terms & Conditions"
-        description="Read the terms and conditions for Elixir Luxury Salon regarding appointments, cancellations, and service guarantees."
+        description="Read the terms and conditions for Ashwini Salon regarding appointments, cancellations, and service guarantees."
         canonical="/terms"
       />
       {/* Hero Section */}

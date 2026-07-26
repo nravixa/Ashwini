@@ -133,7 +133,7 @@ ${formData.name.trim() || "Customer"}`;
     <main className="pb-32 bg-background text-white relative overflow-hidden">
       <SEO 
         title="Contact Us"
-        description="Get in touch with Elixir Luxury Salon. Find our location, hours of operation, and contact details to schedule your next premium salon experience."
+        description="Get in touch with Ashwini Salon. Find our location, hours of operation, and contact details to schedule your next premium salon experience."
         canonical="/contact"
       />
       {/* Background Glows */}

@@ -210,7 +210,7 @@ ${formData.name.trim() || "Customer"}`;
     <div className="px-6 md:px-16 max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start relative z-10">
       <SEO
         title="Book Appointment"
-        description="Reserve your session at Elixir Luxury Salon. Book hair styling, coloring, skin rituals, and bridal services online."
+        description="Reserve your session at Ashwini Salon. Book hair styling, coloring, skin rituals, and bridal services online."
         canonical="/book"
       />
       {/* Booking Form Section */}

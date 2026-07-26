@@ -15,7 +15,7 @@ export default function PrivacyPage() {
     <main className="pb-32 bg-background text-white">
       <SEO
         title="Privacy Policy"
-        description="Learn how Elixir Luxury Salon protects your data and privacy. Review our detailed privacy policy and data handling practices."
+        description="Learn how Ashwini Salon protects your data and privacy. Review our detailed privacy policy and data handling practices."
         canonical="/privacy"
       />
       {/* Hero Section */}

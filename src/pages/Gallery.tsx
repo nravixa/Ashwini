@@ -95,7 +95,7 @@ const GalleryPage = React.memo(function GalleryPage() {
     <main className="pt-32 pb-32 overflow-x-hidden bg-background">
       <SEO 
         title="Gallery"
-        description="View our portfolio of aesthetic excellence. See the transformations and artistry created by the experts at Elixir Luxury Salon."
+        description="View our portfolio of aesthetic excellence. See the transformations and artistry created by the experts at Ashwini Salon."
         canonical="/gallery"
       />
       {/* Header Section */}

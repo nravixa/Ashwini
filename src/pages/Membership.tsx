@@ -157,7 +157,7 @@ export default function MembershipPage() {
     <main className="pb-32 bg-background text-white relative overflow-hidden">
       <SEO 
         title="Membership"
-        description="Join the Elixir Luxury Salon membership program for exclusive benefits, complimentary treatments, and priority booking."
+        description="Join the Ashwini Salon membership program for exclusive benefits, complimentary treatments, and priority booking."
         canonical="/membership"
       />
       {/* Background Glows */}

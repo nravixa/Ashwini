@@ -30,7 +30,7 @@ export default function AboutPage() {
     <main className="bg-background text-white">
       <SEO 
         title="About Us"
-        description="Discover the story behind Elixir Luxury Salon. We blend master craftsmanship with tranquil luxury to redefine elegance."
+        description="Discover the story behind Ashwini Salon. We blend master craftsmanship with tranquil luxury to redefine elegance."
         canonical="/about"
       />
       {/* Hero Section */}

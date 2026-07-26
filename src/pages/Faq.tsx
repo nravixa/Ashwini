@@ -54,7 +54,7 @@ export default function FAQPage() {
     <main className="pb-32 bg-background text-white relative overflow-hidden">
       <SEO 
         title="FAQ"
-        description="Frequently asked questions about Elixir Luxury Salon services, policies, and premium treatments."
+        description="Frequently asked questions about Ashwini Salon services, policies, and premium treatments."
         canonical="/faq"
         structuredData={faqSchema}
       />

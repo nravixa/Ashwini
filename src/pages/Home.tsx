@@ -272,14 +272,14 @@ Subscriber`;
   return (
     <div className="w-full">
       <SEO 
-        title="Elixir Luxury Salon | Redefining Elegance"
-        description="Experience unparalleled luxury at Elixir Salon. We offer bespoke hair artistry, premium skin rituals, and exclusive bridal suites in a serene sanctuary."
+        title="Ashwini Salon | Redefining Elegance"
+        description="Experience unparalleled luxury at Ashwini Salon. We offer bespoke hair artistry, premium skin rituals, and exclusive bridal suites in a serene sanctuary."
         canonical="/"
         preloadImage={heroBgImage}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
-          "name": "Elixir Luxury Salon",
+          "name": "Ashwini Salon",
           "image": "https://ashwinisalon.com/images/home_1.jpg",
           "@id": "",
           "url": "https://ashwinisalon.com",
