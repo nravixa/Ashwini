@@ -394,14 +394,14 @@ img {
   }
 
   /* Hide elements that are not the close button when menu is open */
-  nav:has(#mobile-menu) > div > a,
-  nav:has(#mobile-menu) > div > div:not(.lg\:hidden),
-  nav:has(#mobile-menu) > div > div.lg\:hidden > button:first-child {
+  nav:has(#mobile-menu) > div:not(#mobile-menu) > a,
+  nav:has(#mobile-menu) > div:not(#mobile-menu) > div:not(.lg\:hidden),
+  nav:has(#mobile-menu) > div:not(#mobile-menu) > div.lg\:hidden > button:first-child {
     display: none !important;
   }
 
   /* Keep toggle button clickable */
-  nav:has(#mobile-menu) > div > div.lg\:hidden {
+  nav:has(#mobile-menu) > div:not(#mobile-menu) > div.lg\:hidden {
     pointer-events: auto !important;
   }
 
