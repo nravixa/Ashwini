@@ -76,7 +76,7 @@ const Navbar = React.memo(function Navbar() {
 
           {/* Desktop Nav Links */}
           <div
-            className="hidden md:flex items-center space-x-8"
+            className="hidden lg:flex items-center space-x-8"
             onMouseLeave={() => setHoveredLink(null)}
           >
             {navLinks.map((link) => {
@@ -116,7 +116,7 @@ const Navbar = React.memo(function Navbar() {
             })}
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4">
             {/* Booking Cart Icon Button */}
             <button
               onClick={() => setIsCartOpen(true)}
@@ -142,7 +142,7 @@ const Navbar = React.memo(function Navbar() {
           </div>
 
           {/* Mobile Actions: Cart Icon + Hamburger Toggle */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative p-2.5 rounded-xl border border-white/10 bg-white/5 text-white flex items-center justify-center cursor-pointer"
@@ -173,7 +173,7 @@ const Navbar = React.memo(function Navbar() {
           {isOpen && (
             <div
               id="mobile-menu"
-              className="absolute top-[calc(100%+12px)] left-4 right-4 z-40 premium-glass border border-white/20 shadow-2xl md:hidden flex flex-col px-8 py-8 space-y-6 rounded-3xl"
+              className="absolute top-[calc(100%+12px)] left-4 right-4 z-40 premium-glass border border-white/20 shadow-2xl lg:hidden flex flex-col px-8 py-8 space-y-6 rounded-3xl"
             >
               {navLinks.map((link) => {
                 const isActive =

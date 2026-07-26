@@ -363,9 +363,14 @@ img {
 }
 
 /* ========================================================
-   MOBILE FULL-SCREEN NAVIGATION MENU OVERLAY (MAX-WIDTH: 768PX)
+   MOBILE & TABLET FULL-SCREEN NAVIGATION OVERLAY (MAX-WIDTH: 1024PX)
    ======================================================== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  /* Elevate the parent nav z-index when mobile menu is open to prevent overlapping */
+  nav:has(#mobile-menu) {
+    z-index: 99999 !important;
+  }
+
   /* Style navbar container to only show close button when menu is open */
   nav:has(#mobile-menu) > div {
     background: transparent !important;
@@ -390,13 +395,13 @@ img {
 
   /* Hide elements that are not the close button when menu is open */
   nav:has(#mobile-menu) > div > a,
-  nav:has(#mobile-menu) > div > div:not(.md:hidden),
-  nav:has(#mobile-menu) > div > div.md:hidden > button:first-child {
+  nav:has(#mobile-menu) > div > div:not(.lg:hidden),
+  nav:has(#mobile-menu) > div > div.lg:hidden > button:first-child {
     display: none !important;
   }
 
   /* Keep toggle button clickable */
-  nav:has(#mobile-menu) > div > div.md:hidden {
+  nav:has(#mobile-menu) > div > div.lg:hidden {
     pointer-events: auto !important;
   }
 
