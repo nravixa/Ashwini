@@ -381,7 +381,7 @@ const SmokyButton = forwardRef<HTMLButtonElement | HTMLAnchorElement | HTMLDivEl
     }
   }, [isHovered]);
 
-  const baseStyles = "relative inline-flex items-center justify-center gap-2 font-sans text-[var(--text-base)] uppercase tracking-widest font-semibold rounded-xl transition-all duration-300 focus:outline-none overflow-hidden select-none group";
+  const baseStyles = "relative inline-flex items-center justify-center gap-2.5 font-sans text-xs uppercase tracking-widest font-bold rounded-xl transition-all duration-300 focus:outline-none overflow-hidden select-none py-4 px-8 sm:px-10 group";
   
   let variantStyles = "";
   if (isPrimary) {
@@ -395,7 +395,7 @@ const SmokyButton = forwardRef<HTMLButtonElement | HTMLAnchorElement | HTMLDivEl
     variantStyles = "text-white/80 hover:text-white hover:bg-white/5";
   }
 
-  const widthStyle = fullWidth ? "w-full" : "px-10 py-4 md:px-12 md:py-5";
+  const widthStyle = fullWidth ? "w-full" : "w-auto";
   const hoverActiveStyles = isPrimary && !disabled && !loading 
     ? "hover:scale-[1.03] active:scale-[0.98] hover:shadow-[0_15px_40px_-5px_rgba(240,140,174,0.6)]" 
     : "hover:scale-105 active:scale-95";

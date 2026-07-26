@@ -93,7 +93,7 @@ export default function AboutPage() {
             </p>
             <div className="pt-4 flex justify-center lg:justify-start">
               <Link to="/book" className="w-[85%] max-w-[290px] sm:w-auto flex justify-center">
-                <SmokyButton variant="primary" as="div" className="w-full py-4.5 lg:px-10 lg:py-5 rounded-full font-sans text-xs uppercase tracking-widest font-bold shadow-md flex items-center justify-center">
+                <SmokyButton variant="primary" as="div" className="w-full">
                   Schedule a Consultation
                 </SmokyButton>
               </Link>

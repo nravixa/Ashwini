@@ -55,9 +55,11 @@ const galleryItems = [
 
 const GalleryPage = React.memo(function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Projects");
+  const [activeItem, setActiveItem] = useState<string | null>(null);
 
   const handleCategoryChange = useCallback((category: string) => {
     setSelectedCategory(category);
+    setActiveItem(null); // Reset active state when switching categories
   }, []);
 
   const filteredItems = useMemo(() => (
@@ -70,6 +72,7 @@ const GalleryPage = React.memo(function GalleryPage() {
     filteredItems.map((item) => (
       <div
         key={item.title}
+        onClick={() => setActiveItem(activeItem === item.title ? null : item.title)}
         className="relative group overflow-hidden glass-card rounded-[24px] break-inside-avoid shadow-sm mb-6 cursor-pointer"
       >
         <div className="relative w-full h-[400px]">
@@ -78,9 +81,15 @@ const GalleryPage = React.memo(function GalleryPage() {
             alt={item.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            className={`object-cover transition-transform duration-700 ease-out ${
+              activeItem === item.title ? "scale-105" : "group-hover:scale-105"
+            }`}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8 text-white">
+          <div
+            className={`absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent transition-opacity duration-300 flex flex-col justify-end p-8 text-white ${
+              activeItem === item.title ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+            }`}
+          >
             <span className="card-label mb-2 text-white/80">
               {item.category}
             </span>
@@ -89,7 +98,7 @@ const GalleryPage = React.memo(function GalleryPage() {
         </div>
       </div>
     ))
-  ), [filteredItems]);
+  ), [filteredItems, activeItem]);
 
   return (
     <main className="pt-32 pb-32 overflow-x-hidden bg-background">

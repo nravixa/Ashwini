@@ -409,7 +409,7 @@ ${formData.name.trim() || "Customer"}`;
                   variant="primary"
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 rounded-xl font-sans text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2.5 shadow-md hover:bg-[#1ebd59] transition-colors border-none"
+                  className="w-full border-none"
                 >
                   {isSubmitting ? (
                     <>
