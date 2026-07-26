@@ -268,39 +268,6 @@ const Navbar = React.memo(function Navbar() {
                   </svg>
                 </a>
                 <a
-                  href={TWITTER_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white/80 hover:bg-[#1DA1F2] hover:border-[#1DA1F2] hover:text-white transition-colors duration-300 shadow-sm"
-                  aria-label="X Profile"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                </a>
-                <a
-                  href={LINKEDIN_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white/80 hover:bg-[#0A66C2] hover:border-[#0A66C2] hover:text-white transition-colors duration-300 shadow-sm"
-                  aria-label="LinkedIn Profile"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                </a>
-                <a
-                  href={THREADS_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white/80 hover:bg-black hover:text-white transition-colors duration-300 shadow-sm"
-                  aria-label="Threads Profile"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.184 14.86c-.579.529-1.282.784-2.11.764-1.077-.024-1.954-.429-2.585-1.206-.467-.577-.7-1.298-.7-2.164.004-.847.234-1.543.693-2.091.564-.672 1.344-1.008 2.339-.982 1.258.033 2.061.642 2.408 1.826.046.158.07.319.072.483.003.585-.145 1.134-.442 1.649-.247.428-.59.739-1.03.931-.19.083-.393.136-.607.16-.145.016-.291.02-.437.013-.263-.013-.483-.119-.66-.319-.115-.13-.178-.291-.189-.483-.008-.139.022-.267.091-.384a.65.65 0 0 1 .306-.273c.189-.089.395-.125.617-.107.201.016.388.081.561.196.164.109.288.254.372.436.044.095.068.196.071.303l.001.042c-.001.008-.002.016-.003.023-.002.015-.008.026-.017.034-.035.031-.086.035-.152.012-.132-.047-.238-.134-.316-.263-.09-.15-.119-.319-.089-.508.053-.332.18-.585.381-.758.172-.149.378-.224.618-.224h.024c.264.015.485.121.663.319.117.13.181.291.191.483.008.139-.022.267-.091.384a.656.656 0 0 1-.306.273c-.189.089-.395.125-.617.107-.201-.016-.388-.081-.561-.196-.164-.109-.288-.254-.372-.436-.044-.095-.068-.196-.071-.303v-.065c.01-.84.24-1.52.693-2.042.485-.56 1.157-.84 2.017-.84.757 0 1.353.216 1.787.649.467.467.7 1.099.7 1.896s-.233 1.429-.7 1.896c-.434.433-1.03.649-1.787.649z"/>
-                  </svg>
-                </a>
-                <a
                   href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
