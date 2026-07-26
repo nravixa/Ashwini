@@ -73,18 +73,18 @@ const Navbar = React.memo(function Navbar() {
         className={`fixed top-0 left-0 right-0 z-50 mx-auto w-full max-w-[1440px] px-2 sm:px-8 md:px-16 flex justify-center transition-all duration-300 ${scrolled ? 'pt-3' : 'pt-4'}`}
       >
         <div 
-          className={`flex justify-between items-center w-full border rounded-full px-4 md:px-10 py-3.5 transition-all duration-300 ${scrolled ? 'bg-[#1d1a31]/85 backdrop-blur-md border-white/10' : 'bg-transparent border-transparent'}`}
+          className={`flex justify-between items-center w-full border rounded-full px-5 md:px-8 py-2.5 transition-all duration-300 ${scrolled ? 'bg-[#1d1a31]/85 backdrop-blur-md border-white/10' : 'bg-transparent border-transparent'}`}
         >
           <Link to="/"
             onClick={() => handleLinkClick("/")}
-            className="font-display text-xl sm:text-2xl font-bold tracking-tighter text-white uppercase"
+            className="font-display text-base sm:text-lg font-medium tracking-[0.15em] text-white uppercase"
           >
             ASHWINI SALON
           </Link>
-
+ 
           {/* Desktop Nav Links */}
           <div
-            className="hidden lg:flex items-center space-x-8"
+            className="hidden lg:flex items-center space-x-6"
             onMouseLeave={() => setHoveredLink(null)}
           >
             {navLinks.map((link) => {
@@ -94,78 +94,78 @@ const Navbar = React.memo(function Navbar() {
                   : pathname === link.href || pathname.startsWith(link.href + "/");
               const isHovered = hoveredLink === link.href;
               const isSiblingHovered = hoveredLink !== null && !isHovered;
-
+ 
               return (
                 <Link key={link.name}
                   to={link.href}
                   onClick={() => handleLinkClick(link.href)}
                   onMouseEnter={() => setHoveredLink(link.href)}
-                  className={`relative font-sans text-xs uppercase tracking-widest transition-all duration-300 pb-1.5 ${
-                    isActive ? "text-primary font-semibold" : "text-white/70 hover:text-white"
-                  } ${isSiblingHovered ? "opacity-50 blur-[2px] scale-95" : "opacity-100 blur-none scale-100"}`}
+                  className={`relative font-sans text-[11px] uppercase tracking-[0.18em] transition-all duration-300 pb-1.5 ${
+                    isActive ? "text-primary font-medium" : "text-white/70 hover:text-white"
+                  } ${isSiblingHovered ? "opacity-50 blur-[1px] scale-95" : "opacity-100 blur-none scale-100"}`}
                 >
                   {link.name}
-
+ 
                   {/* Active Page Indicator */}
                   {isActive && (
                     <span
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-tertiary rounded-full shadow-[0_0_8px_rgba(193,165,169,0.8)]"
+                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-tertiary rounded-full shadow-[0_0_8px_rgba(193,165,169,0.8)]"
                     />
                   )}
-
+ 
                   {/* Hover Underline when not active */}
                   {!isActive && isHovered && (
                     <span
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/40 origin-left rounded-full"
+                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-white/40 origin-left rounded-full"
                     />
                   )}
                 </Link>
               );
             })}
           </div>
-
-          <div className="hidden lg:flex items-center gap-4">
+ 
+          <div className="hidden lg:flex items-center gap-3">
             {/* Booking Cart Icon Button */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-3 rounded-xl border border-white/10 bg-white/5 text-white hover:bg-white/10 hover:shadow-sm transition-all duration-300 flex items-center justify-center cursor-pointer"
+              className="relative p-2.5 rounded-xl border border-white/10 bg-white/5 text-white hover:bg-white/10 hover:shadow-sm transition-all duration-300 flex items-center justify-center cursor-pointer"
               aria-label="Open Booking Cart"
             >
-              <ShoppingBag className="w-4.5 h-4.5 text-white" />
+              <ShoppingBag className="w-4 h-4 text-white" />
               {totalCount > 0 && (
                 <span
-                  className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-xs"
+                  className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[9px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white shadow-xs"
                 >
                   {totalCount}
                 </span>
               )}
             </button>
-
+ 
             <Link to="/book">
-              <SmokyButton variant="primary" as="div" className="px-7 py-3 font-sans text-xs uppercase tracking-widest flex items-center gap-2.5 group">
+              <SmokyButton variant="primary" as="div" className="px-6 py-2.5 font-sans text-[10px] uppercase tracking-widest flex items-center gap-2 group">
                 <Calendar className="w-3.5 h-3.5" />
                 <span>Book Now</span>
               </SmokyButton>
             </Link>
           </div>
-
+ 
           {/* Mobile Actions: Cart Icon + Hamburger Toggle */}
           <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2.5 rounded-xl border border-white/10 bg-white/5 text-white flex items-center justify-center cursor-pointer"
+              className="relative p-2 rounded-xl border border-white/10 bg-white/5 text-white flex items-center justify-center cursor-pointer"
               aria-label="Open Booking Cart"
             >
-              <ShoppingBag className="w-5 h-5 text-white" />
+              <ShoppingBag className="w-4.5 h-4.5 text-white" />
               {totalCount > 0 && (
                 <span
-                  className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs"
+                  className="absolute -top-1 -right-1 bg-primary text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs"
                 >
                   {totalCount}
                 </span>
               )}
             </button>
-
+ 
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-primary p-2 focus:outline-none"
@@ -173,7 +173,7 @@ const Navbar = React.memo(function Navbar() {
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-5.5 h-5.5 text-white" />}
             </button>
           </div>
         </div>
