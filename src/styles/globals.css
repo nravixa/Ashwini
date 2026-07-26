@@ -460,10 +460,10 @@ img {
     border-radius: 0 !important;
     box-shadow: none !important;
     /* Spacing & Safe Area padding */
-    padding: calc(env(safe-area-inset-top, 24px) + 80px) 24px calc(env(safe-area-inset-bottom, 24px) + 30px) 24px !important;
+    padding: calc(env(safe-area-inset-top, 24px) + 30px) 24px calc(env(safe-area-inset-bottom, 24px) + 30px) 24px !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: space-between !important; /* Center grouped links while logo remains top and CTA/socials sit bottom */
+    justify-content: center !important; /* Center links group vertically in the screen */
     align-items: center !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
@@ -655,7 +655,7 @@ img {
 
   /* Compact and refined mobile menu layout (≤768px) */
   #mobile-menu {
-    padding-top: calc(env(safe-area-inset-top, 24px) + 50px) !important;
+    padding-top: calc(env(safe-area-inset-top, 24px) + 30px) !important;
     padding-bottom: calc(env(safe-area-inset-bottom, 24px) + 30px) !important;
   }
 
@@ -671,12 +671,6 @@ img {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-  }
-
-  /* Spacing to CTA on mobile */
-  #mobile-menu > div.pt-4 {
-    margin-top: 25px !important; /* Reduced margin */
-    gap: 25px !important; /* Reduced gap between CTA and socials */
   }
 }
 
