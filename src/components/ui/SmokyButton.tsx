@@ -324,7 +324,7 @@ const SmokyButton = forwardRef<HTMLButtonElement | HTMLAnchorElement | HTMLDivEl
   type = "button",
   as,
   ...props
-303: }, ref) => {
+}, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isClient, setIsClient] = useState(false);
