@@ -1,6 +1,7 @@
 import React, { useRef, lazy, Suspense, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
+import ErrorBoundary from "./ErrorBoundary";
 
 const ThreeFooter = lazy(() => import("./animations/ThreeFooter"));
 
@@ -47,7 +48,11 @@ export default React.memo(function Footer() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none" />
         <div className={`absolute inset-0 bg-luxury-gradient-alt opacity-40 pointer-events-none`} />
         <Suspense fallback={<div className="absolute inset-0 w-full h-full opacity-30 bg-white/5" />}>
-          {isThreeFooterInView && <ThreeFooter />}
+          {isThreeFooterInView && (
+            <ErrorBoundary>
+              <ThreeFooter />
+            </ErrorBoundary>
+          )}
         </Suspense>
       </div>
 

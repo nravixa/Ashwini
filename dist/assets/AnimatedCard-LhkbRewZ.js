@@ -1,1 +1,0 @@
-import{j as e}from"./three-BWMDasLi.js";import{R as o}from"./vendor-DWB4FBod.js";const n=o.memo(function({children:r,className:i="",innerClassName:a="",onClick:t}){return e.jsx("div",{onClick:t,className:`relative group ${i} overflow-visible`,children:e.jsx("div",{className:`h-full w-full relative z-10 rounded-[inherit] ${a}`,children:r})})});export{n as A};
