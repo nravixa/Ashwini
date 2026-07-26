@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import SEO from "../components/SEO";
 import Image from "../components/Image";
 import { Link } from "react-router-dom";
-import { Calendar as CalendarIcon, User, Trash2, ShoppingBag } from "lucide-react";
+import { Trash2, ShoppingBag } from "lucide-react";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { CURRENCY_SYMBOL } from "@/lib/currency";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
@@ -11,7 +11,6 @@ import AnimatedSection from "@/components/animations/AnimatedSection";
 
 import SmokyButton from "@/components/ui/SmokyButton";
 import AnimatedIcon from "@/components/animations/AnimatedIcon";
-import AnimatedImage from "@/components/animations/AnimatedImage";
 import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import { useCart } from "@/context/CartContext";
@@ -24,30 +23,20 @@ const fallbackServices = [
   { name: "Bridal Styling", price: 350, duration: "90 Min" },
 ];
 
-const stylists = [
-  { name: "Julianne Rossi", role: "Master Stylist" },
-  { name: "Marcus Thorne", role: "Creative Director" },
-  { name: "Elena Vance", role: "Senior Esthetician" },
-];
-
 const timeSlots = ["09:00 AM", "11:30 AM", "02:00 PM", "04:30 PM", "06:00 PM"];
 
 function BookingFormContent() {
   const [searchParams] = useSearchParams();
-  const initialStylist = searchParams.get("stylist") || "";
   const initialService = searchParams.get("service") || "";
 
-  const { items: cartItems, removeFromCart, totalPrice: cartTotalPrice, clearCart } = useCart();
+  const { items: cartItems, removeFromCart, updateQuantity, totalPrice: cartTotalPrice, clearCart } = useCart();
 
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    email: "",
     service: initialService,
-    stylist: initialStylist,
     date: new Date().toLocaleDateString("en-CA"), // YYYY-MM-DD
     time: "",
-    notes: "",
   });
 
   const [selectedServiceObj, setSelectedServiceObj] = useState<typeof fallbackServices[0] | null>(null);
@@ -127,8 +116,13 @@ function BookingFormContent() {
     let totalServicesCount = 0;
 
     if (hasCartItems) {
-      servicesText = cartItems.map((item) => `• ${item.title} — ${CURRENCY_SYMBOL}${typeof item.price === "number" ? item.price : parseFloat(item.price as string) || 0}`).join("\n");
-      totalServicesCount = cartItems.length;
+      servicesText = cartItems.map((item) => {
+        const itemPrice = typeof item.price === "number" ? item.price : parseFloat(item.price as string) || 0;
+        const itemQty = item.quantity || 1;
+        const suffix = itemQty > 1 ? ` (${itemQty} People)` : "";
+        return `• ${item.title}${suffix} — ${CURRENCY_SYMBOL}${(itemPrice * itemQty).toFixed(2)}`;
+      }).join("\n");
+      totalServicesCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
     } else if (selectedPackage) {
       servicesText = `• ${selectedPackage.title} — ${CURRENCY_SYMBOL}${selectedPackage.price}\n` + selectedPackage.inclusions.map((inc) => `  - ${inc}`).join("\n");
       totalServicesCount = 1;
@@ -140,12 +134,10 @@ function BookingFormContent() {
     const details = [
       formData.name.trim() ? `👤 Name: ${formData.name.trim()}` : null,
       formData.phone.trim() ? `📞 Phone: ${formData.phone.trim()}` : null,
-      formData.email.trim() ? `📧 Email: ${formData.email.trim()}` : null,
       `💬 Subject: Booking Confirmation`,
       `📅 Date: ${dateText}`,
       `🕒 Time: ${timeText}`,
       `💇 Selected Services:\n${servicesText}`,
-      formData.notes.trim() ? `📝 Additional Notes:\n${formData.notes.trim()}` : null,
       `💰 Total Services: ${totalServicesCount}`,
       `💳 Estimated Total: ${CURRENCY_SYMBOL}${total.toFixed(2)}`,
     ].filter(Boolean).join("\n");
@@ -172,8 +164,6 @@ ${formData.name.trim() || "Customer"}`;
       if (!newWindow || newWindow.closed || typeof newWindow.closed === "undefined") {
         alert("We couldn't open WhatsApp automatically. Please disable your pop-up blocker or check your connection and try again.");
       } else {
-        // We set isSubmitted to true to show the success modal, 
-        // which now acts as the "waiting for confirmation/return" modal.
         setIsSubmitted(true);
       }
     } catch (err) {
@@ -207,14 +197,14 @@ ${formData.name.trim() || "Customer"}`;
   const total = subtotal + bookingFee;
 
   return (
-    <div className="px-6 md:px-16 max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start relative z-10">
+    <div className="px-6 md:px-16 max-w-[1440px] mx-auto flex justify-center items-start relative z-10">
       <SEO
         title="Book Appointment"
         description="Reserve your session at Ashwini Salon. Book hair styling, coloring, skin rituals, and bridal services online."
         canonical="/book"
       />
       {/* Booking Form Section */}
-      <AnimatedSection className="lg:col-span-7 space-y-10">
+      <AnimatedSection className="w-full max-w-[650px] space-y-10">
         <div className="glass-card p-8 md:p-12 border border-white/10 shadow-2xl rounded-3xl bg-white/[0.02] backdrop-blur-xl">
           <div className="mb-8">
             <h3 className="font-display text-2xl md:text-3xl font-medium text-white mb-2">
@@ -240,22 +230,75 @@ ${formData.name.trim() || "Customer"}`;
 
               <div className="space-y-3">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 border-b border-white/5 last:border-0">
+                  <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-3 border-b border-white/5 last:border-0">
                     <div className="min-w-0 flex-1">
                       <p className="font-sans text-[10px] text-white/70 uppercase font-bold tracking-widest">{item.category || "Service"}</p>
                       <p className="font-display font-medium text-white text-base truncate">{item.title}</p>
                       {item.duration && <p className="font-sans text-xs text-white/70">{item.duration}</p>}
+                      
+                      {/* Guest Selector in Book page inline cart banner */}
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="font-sans text-[10px] uppercase tracking-wider text-white/60 font-semibold">Guests:</span>
+                        {item.quantity < 5 ? (
+                          <select
+                            value={item.quantity.toString()}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === "5+") {
+                                updateQuantity(item.id, 5);
+                              } else {
+                                updateQuantity(item.id, parseInt(val, 10));
+                              }
+                            }}
+                            className="bg-white/5 border border-white/10 rounded-lg px-2.5 py-0.5 text-xs font-sans font-medium text-white focus:outline-none cursor-pointer [color-scheme:dark]"
+                          >
+                            <option value="1" className="bg-background">1 Person</option>
+                            <option value="2" className="bg-background">2 People</option>
+                            <option value="3" className="bg-background">3 People</option>
+                            <option value="4" className="bg-background">4 People</option>
+                            <option value="5+" className="bg-background">5+ People...</option>
+                          </select>
+                        ) : (
+                          <div className="flex items-center gap-1.5">
+                            <input
+                              type="number"
+                              min="5"
+                              value={item.quantity}
+                              onChange={(e) => {
+                                const parsed = parseInt(e.target.value, 10);
+                                updateQuantity(item.id, isNaN(parsed) ? 5 : parsed);
+                              }}
+                              className="w-12 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5 text-xs font-sans font-medium text-white focus:outline-none text-center"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => updateQuantity(item.id, 1)}
+                              className="text-[10px] text-rose-gold uppercase font-bold tracking-wider hover:underline ml-1"
+                            >
+                              Reset
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-                      <p className="font-sans font-bold text-white text-sm min-w-[50px] text-right">
-                        {CURRENCY_SYMBOL}{(typeof item.price === "number" ? item.price : parseFloat(item.price as string) || 0)}
-                      </p>
+                    <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
+                      <div className="text-right">
+                        <p className="font-sans font-bold text-white text-sm">
+                          {CURRENCY_SYMBOL}{(typeof item.price === "number" ? item.price : parseFloat(item.price as string) || 0)} <span className="text-[10px] text-white/50 font-normal">/ person</span>
+                        </p>
+                        {item.quantity > 1 && (
+                          <p className="font-sans text-xs text-rose-gold font-semibold mt-0.5">
+                            Subtotal: {CURRENCY_SYMBOL}{(parseFloat(item.price.replace(/[^0-9.]/g, "")) * item.quantity).toFixed(2)}
+                          </p>
+                        )}
+                      </div>
 
                       <button
                         type="button"
                         onClick={() => removeFromCart(item.id)}
                         className="text-white/70 hover:text-red-400 transition-colors p-1"
+                        aria-label="Remove Service"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -288,29 +331,18 @@ ${formData.name.trim() || "Customer"}`;
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-6">
-              <FormInput
-                label="Email (Optional)"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="elena@example.com"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {selectedPackage ? (
-                <div className="flex flex-col gap-2">
-                  <label className="font-sans text-xs uppercase tracking-widest text-white/70 font-semibold">
-                    Selected Package
-                  </label>
-                  <div className="bg-white/5 border border-white/10 px-4 py-3 rounded-xl font-sans text-sm text-rose-gold select-none cursor-default font-medium">
-                    {selectedPackage.title} ({CURRENCY_SYMBOL}{selectedPackage.price})
+            {!hasCartItems && (
+              <div className="grid grid-cols-1 gap-6">
+                {selectedPackage ? (
+                  <div className="flex flex-col gap-2">
+                    <label className="font-sans text-xs uppercase tracking-widest text-white/70 font-semibold">
+                      Selected Package
+                    </label>
+                    <div className="bg-white/5 border border-white/10 px-4 py-3 rounded-xl font-sans text-sm text-rose-gold select-none cursor-default font-medium">
+                      {selectedPackage.title} ({CURRENCY_SYMBOL}{selectedPackage.price})
+                    </div>
                   </div>
-                </div>
-              ) : (
-                !hasCartItems && (
+                ) : (
                   <FormSelect
                     label="Service Type"
                     name="service"
@@ -323,22 +355,9 @@ ${formData.name.trim() || "Customer"}`;
                     }))}
                     placeholder="Select a Service"
                   />
-                )
-              )}
-
-              <FormSelect
-                label="Lead Stylist"
-                name="stylist"
-                required
-                value={formData.stylist}
-                onChange={handleChange}
-                options={stylists.map((styl) => ({
-                  value: styl.name,
-                  label: `${styl.name} - ${styl.role}`,
-                }))}
-                placeholder="Select a Stylist"
-              />
-            </div>
+                )}
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormInput
@@ -365,148 +384,17 @@ ${formData.name.trim() || "Customer"}`;
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-6">
-              <FormInput
-                label="Special Notes"
-                type="text"
-                name="notes"
-                value={formData.notes}
-                onChange={handleChange}
-                placeholder="Any specific requests?"
-              />
-            </div>
-
             <div className="flex flex-col sm:flex-row gap-6 pt-6">
               <SmokyButton
                 type="submit"
                 variant="primary"
-                className="flex-1"
+                className="flex-1 py-4.5"
               >
                 Confirm Appointment
               </SmokyButton>
             </div>
           </form>
         </div>
-      </AnimatedSection>
-
-      {/* Sidebar Summary Section */}
-      <AnimatedSection className="lg:col-span-5 lg:sticky lg:top-32 space-y-8">
-        <div className="glass-card p-8 md:p-10 border border-white/10 shadow-2xl rounded-3xl bg-white/[0.02] backdrop-blur-xl">
-          <h3 className="font-display text-2xl font-medium text-white mb-6 border-b border-white/10 pb-4">
-            Appointment Summary
-          </h3>
-          <div className="space-y-6">
-            <div>
-              <p className="font-sans text-[10px] text-white/70 uppercase tracking-wider mb-2 font-bold">
-                Selected Services
-              </p>
-              {hasCartItems ? (
-                <div className="space-y-2">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="flex justify-between items-center text-sm">
-                      <span className="font-display font-medium text-white truncate max-w-[200px]">
-                        {item.title}
-                      </span>
-                      <span className="font-sans font-bold text-rose-gold">
-                        {CURRENCY_SYMBOL}{(typeof item.price === "number" ? item.price : parseFloat(item.price as string) || 0)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              ) : selectedPackage ? (
-                <div className="space-y-4">
-                  <p className="font-display text-xl font-medium text-white">
-                    {selectedPackage.title}
-                  </p>
-                  {selectedPackage.inclusions.length > 0 && (
-                    <div className="space-y-2 pt-2 border-t border-white/10">
-                      <p className="font-sans text-[10px] text-white/70 uppercase tracking-wider font-bold">
-                        Package Inclusions
-                      </p>
-                      <ul className="space-y-1.5">
-                        {selectedPackage.inclusions.map((inc, i) => (
-                          <li key={i} className="flex items-start gap-2 font-sans text-xs text-white/70">
-                            <span className="text-rose-gold shrink-0 mt-0.5">•</span>
-                            <span>{inc}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  <div className="text-xs font-sans text-rose-gold font-semibold pt-1">
-                    Original Price: <span className="line-through text-white/70">{CURRENCY_SYMBOL}{selectedPackage.originalPrice}</span> (Save {CURRENCY_SYMBOL}{selectedPackage.savings})
-                  </div>
-                </div>
-              ) : (
-                <p className="font-display text-xl font-medium text-white">
-                  {formData.service || "Standard Consultation"}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-4 pt-4 border-t border-white/10">
-              <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
-                  <AnimatedIcon>
-                    <User className="w-4 h-4 text-rose-gold" />
-                  </AnimatedIcon>
-                </div>
-                <div>
-                  <p className="font-sans text-[10px] text-white/70 uppercase tracking-wider font-bold">
-                    Stylist
-                  </p>
-                  <p className="font-sans text-sm font-semibold text-white">
-                    {formData.stylist || "Not selected"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
-                  <AnimatedIcon>
-                    <CalendarIcon className="w-4 h-4 text-rose-gold" />
-                  </AnimatedIcon>
-                </div>
-                <div>
-                  <p className="font-sans text-[10px] text-white/70 uppercase tracking-wider font-bold">
-                    Date & Time
-                  </p>
-                  <p className="font-sans text-sm font-semibold text-white">
-                    {formData.date ? `${getFormattedDate()} at ${formData.time || "TBD"}` : "TBD"}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-6 border-t border-white/10 space-y-3">
-              <div className="flex justify-between items-center text-sm text-white/70">
-                <span>Subtotal</span>
-                <span>{CURRENCY_SYMBOL}{subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center text-sm text-white/70">
-                <span>Reservation Deposit</span>
-                <span>{CURRENCY_SYMBOL}{bookingFee.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center text-rose-gold font-bold text-lg border-t border-white/10 pt-4">
-                <span>Total Amount</span>
-                <span className="font-display text-2xl">{CURRENCY_SYMBOL}{total.toFixed(2)}</span>
-              </div>
-              <p className="text-[10px] text-white/70 leading-relaxed uppercase tracking-widest mt-4 opacity-75">
-                Cancellations must be made 24 hours in advance. Balance payable at the studio.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Visual Mood Image */}
-        <AnimatedImage className="rounded-2xl h-64 shadow-md group overflow-hidden">
-          <Image
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHVCV-amR4PX8aUFXCarpisKIfjZZg2-tKSCpbYXaU4w0mJyvSrRK1rEUoxo2uaB-HU2-dLrZ0cAVVzavn5PrJ_vwt249p8j18WNo0cADcrDc3ocITQcb8YLRs7TixBFP5UeYDP7G_bYLwbe4NvED0lZFJX029ccAd4lq4KTij7UH7IKkPSKXOw-zBFIQssbme254QcCUB5MTLpwD-be_deS8tnsQlU0oYKv7v1xhDA39RGwkD6ankH3T3rtPhczRn2bZH_7C7rkg"
-            alt="Serene minimalist styling chair at Ashwini Salon"
-            fill
-            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-[2000ms]"
-          />
-        </AnimatedImage>
       </AnimatedSection>
 
       {/* WhatsApp Sent Confirmation Modal */}
@@ -553,7 +441,6 @@ ${formData.name.trim() || "Customer"}`;
           </div>
         </div>
       )}
-
     </div>
   );
 }

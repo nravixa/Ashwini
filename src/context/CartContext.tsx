@@ -22,6 +22,7 @@ interface CartContextType {
   setIsCartOpen: (open: boolean) => void;
   addToCart: (item: Omit<CartItem, "quantity" | "price"> & { price: string | number }) => void;
   removeFromCart: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   totalCount: number;
   totalPrice: number;
@@ -82,6 +83,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const updateQuantity = useCallback((id: string, quantity: number) => {
+    setItems((prevItems) => {
+      const updatedItems = prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
+      );
+      localStorage.setItem("ashwini_cart", JSON.stringify(updatedItems));
+      return updatedItems;
+    });
+  }, []);
+
   const clearCart = useCallback(() => {
     setItems([]);
     localStorage.removeItem("ashwini_cart");
@@ -94,7 +105,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const totalCount = items.length;
   const totalPrice = items.reduce((acc, item) => {
     const numPrice = parseFloat(item.price.replace(/[^0-9.]/g, "")) || 0;
-    return acc + numPrice;
+    return acc + (numPrice * (item.quantity || 1));
   }, 0);
 
   return (
@@ -105,6 +116,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setIsCartOpen,
         addToCart,
         removeFromCart,
+        updateQuantity,
         clearCart,
         totalCount,
         totalPrice,

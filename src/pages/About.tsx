@@ -91,9 +91,9 @@ export default function AboutPage() {
             <p className="font-sans text-sm md:text-base text-white/70 leading-relaxed">
               Each styling suite features custom-crafted glass partitions to allow ambient sun exposure while preserving your personal peace. At Ashwini Beauty & Salon, luxury is not a finish—it is our absolute standard of care.
             </p>
-            <div className="pt-4">
-              <Link to="/book">
-                <SmokyButton variant="primary" as="div" className="px-10 py-5 rounded-full font-sans text-xs uppercase tracking-widest font-bold shadow-md">
+            <div className="pt-4 flex justify-center lg:justify-start">
+              <Link to="/book" className="w-[85%] max-w-[290px] sm:w-auto flex justify-center">
+                <SmokyButton variant="primary" as="div" className="w-full py-4.5 lg:px-10 lg:py-5 rounded-full font-sans text-xs uppercase tracking-widest font-bold shadow-md flex items-center justify-center">
                   Schedule a Consultation
                 </SmokyButton>
               </Link>

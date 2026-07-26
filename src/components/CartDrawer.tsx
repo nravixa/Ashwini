@@ -13,6 +13,7 @@ const CartDrawer = React.memo(function CartDrawer() {
     isCartOpen,
     setIsCartOpen,
     removeFromCart,
+    updateQuantity,
     totalCount,
     totalPrice,
   } = useCart();
@@ -119,9 +120,59 @@ const CartDrawer = React.memo(function CartDrawer() {
                           {item.duration}
                         </span>
                       )}
-                      <p className="font-sans text-[var(--text-xl)] font-bold text-primary mt-1">
-                        {CURRENCY_SYMBOL}{item.price}
+                      <p className="font-sans text-sm font-bold text-primary mt-1">
+                        {CURRENCY_SYMBOL}{item.price} <span className="text-xs text-secondary font-normal">/ person</span>
                       </p>
+                      {item.quantity > 1 && (
+                        <p className="font-sans text-xs text-rose-gold font-bold mt-0.5">
+                          Subtotal: {CURRENCY_SYMBOL}{(parseFloat(item.price.replace(/[^0-9.]/g, "")) * item.quantity).toFixed(2)}
+                        </p>
+                      )}
+
+                      {/* People Quantity Selector */}
+                      <div className="flex items-center gap-2 mt-2 pt-2 border-t border-black/5">
+                        <span className="font-sans text-[10px] uppercase tracking-wider text-secondary font-semibold">Guests:</span>
+                        {item.quantity < 5 ? (
+                          <select
+                            value={item.quantity.toString()}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === "5+") {
+                                updateQuantity(item.id, 5);
+                              } else {
+                                updateQuantity(item.id, parseInt(val, 10));
+                              }
+                            }}
+                            className="bg-black/[0.03] border border-black/10 rounded-lg px-2 py-0.5 text-xs font-sans font-medium text-primary focus:outline-none cursor-pointer"
+                          >
+                            <option value="1">1 Person</option>
+                            <option value="2">2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4 People</option>
+                            <option value="5+">5+ People...</option>
+                          </select>
+                        ) : (
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              min="5"
+                              value={item.quantity}
+                              onChange={(e) => {
+                                const parsed = parseInt(e.target.value, 10);
+                                updateQuantity(item.id, isNaN(parsed) ? 5 : parsed);
+                              }}
+                              className="w-12 bg-black/[0.03] border border-black/10 rounded-lg px-2 py-0.5 text-xs font-sans font-medium text-primary focus:outline-none text-center"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => updateQuantity(item.id, 1)}
+                              className="text-[10px] text-rose-gold uppercase font-bold tracking-wider hover:underline ml-1"
+                            >
+                              Reset
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     {/* Delete Controls */}

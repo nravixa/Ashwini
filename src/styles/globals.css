@@ -363,9 +363,9 @@ img {
 }
 
 /* ========================================================
-   MOBILE & TABLET FULL-SCREEN NAVIGATION OVERLAY (MAX-WIDTH: 1024PX)
+   MOBILE & TABLET FULL-SCREEN NAVIGATION OVERLAY (MAX-WIDTH: 1279PX)
    ======================================================== */
-@media (max-width: 1024px) {
+@media (max-width: 1279px) {
   /* Elevate the parent nav z-index when mobile menu is open to prevent overlapping */
   nav:has(#mobile-menu.is-open) {
     z-index: 99999 !important;

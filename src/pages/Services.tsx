@@ -148,6 +148,17 @@ type SectionKey = keyof typeof servicesData;
 export default function ServicesPage() {
   const [activeSection, setActiveSection] = useState<SectionKey>("hair");
   const [navbarHeight, setNavbarHeight] = useState(80);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Resize listener to track mobile breakpoint for sticky offsets
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Dynamically measure navbar height to set exact offsets for sticky and scroll behavior
   useEffect(() => {
@@ -177,7 +188,7 @@ export default function ServicesPage() {
   // Scroll-Spy observer to highlight active category in real time while scrolling
   useEffect(() => {
     const sectionKeys = Object.keys(servicesData) as SectionKey[];
-    const topMargin = navbarHeight + 80;
+    const topMargin = navbarHeight + (isMobile ? 80 : 40);
     const observerOptions = {
       root: null,
       rootMargin: `-${topMargin}px 0px -55% 0px`,
@@ -198,7 +209,7 @@ export default function ServicesPage() {
     });
 
     return () => observer.disconnect();
-  }, [navbarHeight]);
+  }, [navbarHeight, isMobile]);
 
   // Auto-scroll the active category pill into view on mobile/tablet
   useEffect(() => {
@@ -227,7 +238,7 @@ export default function ServicesPage() {
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - (navbarHeight + 40);
+      const offsetPosition = elementPosition - (navbarHeight + (isMobile ? 75 : 40));
 
       window.scrollTo({
         top: offsetPosition,
@@ -275,11 +286,14 @@ export default function ServicesPage() {
 
       {/* Services Main Container */}
       <div className="px-6 md:px-16 max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-10 mt-10 lg:mt-12">
-        {/* Mobile/Tablet Category Chips (<1024px) */}
-        <div className="w-full lg:hidden mb-6">
+        {/* Mobile/Tablet Category Chips (<1024px) - STICKY OVERLAY CONTAINER */}
+        <div 
+          className="w-full lg:hidden sticky z-30 bg-background/90 backdrop-blur-md py-3 -mx-6 px-6 border-b border-white/10 mb-6"
+          style={{ top: `${navbarHeight}px` }}
+        >
           <div
             id="mobile-chips-container"
-            className="glass-card p-2 flex flex-row overflow-x-auto gap-2 no-scrollbar w-full scroll-smooth"
+            className="glass-card p-1.5 flex flex-row overflow-x-auto gap-1.5 no-scrollbar w-full scroll-smooth"
           >
             {(Object.keys(servicesData) as SectionKey[]).map((key) => {
               const active = activeSection === key;
@@ -289,7 +303,7 @@ export default function ServicesPage() {
                   key={key}
                   id={`chip-${key}`}
                   onClick={() => scrollToSection(key)}
-                  className={`group relative flex-shrink-0 flex items-center justify-center px-5 py-2.5 rounded-full font-sans text-xs uppercase tracking-widest transition-all duration-300 ${
+                  className={`group relative flex-shrink-0 flex items-center justify-center px-4 py-2 text-[10px] sm:px-5 sm:py-2.5 sm:text-xs rounded-full font-sans uppercase tracking-widest transition-all duration-300 ${
                     active
                       ? "text-rose-gold font-bold bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]"
                       : "text-white/70 hover:text-white hover:bg-white/5 font-medium"
@@ -358,7 +372,7 @@ export default function ServicesPage() {
               <AnimatedSection
                 key={key}
                 id={key}
-                style={{ scrollMarginTop: `${navbarHeight + 40}px` }}
+                style={{ scrollMarginTop: `${navbarHeight + (isMobile ? 75 : 40)}px` }}
               >
                 <div className="flex items-baseline gap-4 mb-8 sm:mb-10 border-b border-outline-variant/10 pb-3 sm:pb-4">
                   <AnimatedHeading

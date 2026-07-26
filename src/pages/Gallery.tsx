@@ -166,28 +166,30 @@ const GalleryPage = React.memo(function GalleryPage() {
       </AnimatedSection>
 
       {/* CTA section */}
-      <AnimatedSection className="mt-32 px-6 md:px-16 max-w-[1440px] mx-auto">
-        <MouseParallax factor={10}>
-          <div className="relative h-[400px] flex items-center justify-center text-center overflow-hidden rounded-3xl group border border-outline-variant/10 shadow-lg">
+      <AnimatedSection className="mt-20 md:mt-32 px-6 md:px-16 max-w-[1440px] mx-auto">
+        <MouseParallax factor={5}>
+          <div className="relative h-[320px] sm:h-[350px] md:h-[400px] flex items-center justify-center text-center overflow-hidden rounded-3xl group border border-outline-variant/10 shadow-lg">
             <Image
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCP-mGlnwoBWTrkcCTjRR8CrlNG93dEUIvNUc-QWT6G61qJWNkQ2Aqtoa3U4wN8q5Hj3k6ij2LKn7DkuaEsYBUdJB36jdzwACQIeH4WrgsOrX1Tz9hTUzp5u3g1cUYjddFFG1SN4FkPN-u0QSEG-kTelkUHoOvc-oAY6wdlM0PjeCGltwiljqIRkTNjljTy9LZh3J3vUNQiXjjYg8KuU5CVVNCZzua6PCEcW7KftaFAVLdOvgNDY70y_XLELpziXHeYXD7VI2-yywA"
               alt="Out of focus background of luxury salon"
               fill
               priority
-              className="object-cover scale-110 group-hover:scale-100 transition-transform duration-[2000ms]"
+              className="object-cover scale-110 group-hover:scale-100 transition-transform duration-[2000ms] object-center max-md:object-[50%_45%]"
             />
-            <div className="absolute inset-0 bg-black/55" />
-            <div className="relative z-10 px-6">
+            <div className="absolute inset-0 bg-black/60" />
+            <div className="relative z-10 px-4 py-8 flex flex-col justify-center items-center w-full h-full">
               <AnimatedHeading
                 text="Ready to write your own story?"
                 as="h2"
-                className="font-display text-3xl md:text-5xl text-white mb-8"
+                className="font-display text-[clamp(24px,4.5vw,42px)] text-white mb-6 leading-tight max-w-xl mx-auto"
               />
-              <Link to="/book">
-                <SmokyButton variant="primary" as="div" className="px-12 py-5 font-sans text-xs uppercase tracking-[0.2em]">
-                  Book Your Session
-                </SmokyButton>
-              </Link>
+              <div className="flex justify-center w-full">
+                <Link to="/book" className="w-[85%] max-w-[280px] sm:w-auto">
+                  <SmokyButton variant="primary" as="div" className="w-full py-4.5 font-sans text-xs uppercase tracking-[0.2em] flex items-center justify-center">
+                    Book Your Session
+                  </SmokyButton>
+                </Link>
+              </div>
             </div>
           </div>
         </MouseParallax>
