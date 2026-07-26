@@ -10,11 +10,19 @@ export default function ScrollToTop() {
     if (lenis) {
       lenis.scrollTo(0, { immediate: true });
     } else {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "auto"
-      });
+      try {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "instant" as any
+        });
+      } catch (e) {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "auto"
+        });
+      }
     }
   }, [pathname, lenis]);
 

@@ -183,13 +183,15 @@ class SmokyShaderManager {
   };
 
   register(instance: ButtonInstance) {
-    if (!this.isInitialized) this.init();
     this.buttons.add(instance);
+    if (instance.width > 0 && instance.height > 0 && !this.isInitialized) {
+      this.init();
+    }
     if (this.intersectionObserver && instance.canvas) {
       (instance.canvas as any).__smokyInstance = instance;
       this.intersectionObserver.observe(instance.canvas);
     }
-    if (this.buttons.size === 1) {
+    if (this.buttons.size === 1 && this.isInitialized && this.rafId === 0) {
       this.startTime = Date.now();
       cancelAnimationFrame(this.rafId);
       this.loop();
@@ -204,25 +206,40 @@ class SmokyShaderManager {
     this.buttons.delete(instance);
     if (this.buttons.size === 0) {
       cancelAnimationFrame(this.rafId);
+      this.rafId = 0;
+    }
+  }
+
+  updateSize(instance: ButtonInstance, w: number, h: number) {
+    instance.width = w;
+    instance.height = h;
+    instance.isVisible = w > 0 && h > 0;
+    
+    if (instance.isVisible && !this.isInitialized) {
+      this.init();
+    }
+    
+    if (this.isInitialized && this.buttons.size > 0 && this.rafId === 0) {
+      this.startTime = Date.now();
+      this.loop();
     }
   }
 
   private loop = () => {
-    if (!this.gl || !this.program || this.buttons.size === 0 || document.hidden) return;
+    if (!this.gl || !this.program || this.buttons.size === 0 || document.hidden) {
+      this.rafId = 0;
+      return;
+    }
     
     let hasVisibleButtons = false;
-
-    // Use lower resolution modifier on slow devices if possible, here we use fixed DPR logic
-    const dpr = Math.min(window.devicePixelRatio || 1, 2); 
     const time = (Date.now() - this.startTime) * 0.001;
 
     for (const btn of this.buttons) {
-      if (!btn.isVisible || !btn.canvas || !btn.ctx) continue;
+      if (!btn.isVisible || !btn.canvas || !btn.ctx || !btn.width || !btn.height) continue;
       hasVisibleButtons = true;
 
-      const rect = btn.canvas.getBoundingClientRect();
-      const w = rect.width * dpr;
-      const h = rect.height * dpr;
+      const w = btn.width;
+      const h = btn.height;
 
       if (this.canvas!.width !== w || this.canvas!.height !== h) {
         this.canvas!.width = w;
@@ -257,7 +274,11 @@ class SmokyShaderManager {
     } else {
       // Slow down polling if nothing is visible
       setTimeout(() => {
-        this.rafId = requestAnimationFrame(this.loop);
+        if (this.buttons.size > 0 && !document.hidden) {
+          this.rafId = requestAnimationFrame(this.loop);
+        } else {
+          this.rafId = 0;
+        }
       }, 200);
     }
   };
@@ -266,6 +287,7 @@ class SmokyShaderManager {
     if (this.intersectionObserver) this.intersectionObserver.disconnect();
     document.removeEventListener("visibilitychange", this.handleVisibilityChange);
     cancelAnimationFrame(this.rafId);
+    this.rafId = 0;
     if (this.gl && this.program) {
       this.gl.deleteProgram(this.program);
       this.gl.deleteBuffer(this.positionBuffer);
@@ -280,6 +302,8 @@ interface ButtonInstance {
   isHovered: boolean;
   hoverState: number;
   isVisible: boolean;
+  width: number;
+  height: number;
 }
 
 const manager = new SmokyShaderManager();
@@ -300,7 +324,7 @@ const SmokyButton = forwardRef<HTMLButtonElement | HTMLAnchorElement | HTMLDivEl
   type = "button",
   as,
   ...props
-}, ref) => {
+303: }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -315,20 +339,37 @@ const SmokyButton = forwardRef<HTMLButtonElement | HTMLAnchorElement | HTMLDivEl
   useLayoutEffect(() => {
     if (!isClient || !isPrimary || !canvasRef.current) return;
 
-    const ctx = canvasRef.current.getContext("2d");
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const instance: ButtonInstance = {
-      canvas: canvasRef.current,
+      canvas,
       ctx,
       isHovered: false,
       hoverState: 0,
-      isVisible: true,
+      isVisible: false,
+      width: 0,
+      height: 0
     };
 
     manager.register(instance);
 
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const rect = entry.contentRect;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.round(rect.width * dpr);
+        const h = Math.round(rect.height * dpr);
+
+        manager.updateSize(instance, w, h);
+      }
+    });
+
+    observer.observe(canvas);
+
     return () => {
+      observer.disconnect();
       manager.unregister(instance);
     };
   }, [isClient, isPrimary]);
