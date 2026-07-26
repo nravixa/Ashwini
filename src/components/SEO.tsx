@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 
 interface SEOProps {
@@ -21,21 +20,21 @@ export default function SEO({
   const location = useLocation();
   const siteUrl = 'https://ashwinisalon.com';
   const currentPath = canonical || location.pathname;
-  
+
   // Clean up canonical URL (remove trailing slashes, ensure correct structure)
-  const fullCanonicalUrl = currentPath === '/' 
-    ? siteUrl 
+  const fullCanonicalUrl = currentPath === '/'
+    ? siteUrl
     : `${siteUrl}${currentPath.startsWith('/') ? currentPath : `/${currentPath}`}`;
-    
-  const siteName = 'Elixir Luxury Salon';
+
+  const siteName = 'Ashwini Salon';
   // Use a default image if none provided
-  const ogImage = image ? `${siteUrl}${image}` : `${siteUrl}/images/gallery/gallery-1.jpg`; 
+  const ogImage = image ? `${siteUrl}${image}` : `${siteUrl}/images/gallery/gallery-1.jpg`;
 
   // Format title to avoid duplicating site name if it's already there
   const formattedTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 
   return (
-    <Helmet>
+    <>
       {/* Standard Meta Tags */}
       <title>{formattedTitle}</title>
       <meta name="description" content={description} />
@@ -63,6 +62,6 @@ export default function SEO({
           {JSON.stringify(structuredData)}
         </script>
       )}
-    </Helmet>
+    </>
   );
 }

@@ -1,1 +1,0 @@
-import{j as e}from"./three-BhY9fBfb.js";function t({children:r,className:i="",innerClassName:l="",onClick:s}){return e.jsx("div",{onClick:s,className:`relative group ${i} overflow-visible`,children:e.jsx("div",{className:`h-full w-full relative z-10 rounded-[inherit] ${l}`,children:r})})}export{t as A};
