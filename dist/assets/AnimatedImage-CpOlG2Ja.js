@@ -1,0 +1,1 @@
+import{j as e}from"./three-BhY9fBfb.js";function l({children:s,className:a=""}){return e.jsx("div",{className:`relative overflow-hidden ${a}`,children:e.jsx("div",{className:"w-full h-full",children:s})})}export{l as A};

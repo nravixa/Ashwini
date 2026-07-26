@@ -1,0 +1,1 @@
+const C="₹";export{C};
