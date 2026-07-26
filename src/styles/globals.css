@@ -393,20 +393,9 @@ img {
     pointer-events: none !important;
   }
 
-  /* Center capsule logo at top-center when mobile menu is open */
+  /* Hide capsule logo when mobile menu is open (logo is centered inside the menu itself) */
   nav:has(#mobile-menu.is-open) > div:not(#mobile-menu) > a {
-    position: fixed !important;
-    top: 32px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    font-family: var(--font-display, serif) !important;
-    font-size: 1.5rem !important;
-    letter-spacing: 0.15em !important;
-    color: white !important;
-    pointer-events: auto !important;
-    z-index: 100000 !important;
-    display: block !important;
-    transition: all 0.3s ease !important;
+    display: none !important;
   }
 
   /* Style close button when mobile menu is open */
@@ -470,11 +459,11 @@ img {
     border: none !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    /* Padding leaves space for logo/close button at the top and spacing at the bottom */
-    padding: calc(env(safe-area-inset-top, 24px) + 110px) 24px calc(env(safe-area-inset-bottom, 24px) + 32px) 24px !important;
+    /* Spacing & Safe Area padding */
+    padding: calc(env(safe-area-inset-top, 24px) + 80px) 24px calc(env(safe-area-inset-bottom, 24px) + 30px) 24px !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: flex-start !important;
+    justify-content: space-between !important; /* Center grouped links while logo remains top and CTA/socials sit bottom */
     align-items: center !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
@@ -482,13 +471,42 @@ img {
     transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
-  /* Spacing and layout for navigation links */
-  #mobile-menu > a {
-    margin: 10px 0 !important;
-    padding: 8px 24px !important;
+  /* Logo top centering and spacing */
+  #mobile-menu > .mobile-menu-logo {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 40px !important; /* Space between logo and first menu item */
+    flex-shrink: 0 !important;
+    width: 100% !important;
+  }
+
+  #mobile-menu > .mobile-menu-logo > a {
     font-family: var(--font-display, serif) !important;
-    font-size: clamp(32px, 4.8vh, 40px) !important;
-    font-weight: 300 !important;
+    font-size: 1.6rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.15em !important;
+    color: white !important;
+    text-align: center !important;
+  }
+
+  /* Links group centering container */
+  #mobile-menu > .mobile-menu-links {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    flex-grow: 1 !important;
+  }
+
+  /* Spacing and layout for navigation links */
+  #mobile-menu > .mobile-menu-links > a {
+    margin: 12px 0 !important; /* 12px top + 12px bottom = 24px vertical spacing between menu items */
+    padding: 4px 24px !important;
+    font-family: var(--font-display, serif) !important;
+    font-size: clamp(32px, 4.2vh, 40px) !important;
+    font-weight: 400 !important;
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
     color: rgba(255, 255, 255, 0.9) !important;
@@ -505,10 +523,18 @@ img {
                 color 250ms cubic-bezier(0.4, 0, 0.2, 1), 
                 text-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) !important;
     position: relative !important;
+    opacity: 0;
+    transform: translateY(-15px) translateZ(0);
+  }
+
+  /* Active page/links opacity transitions */
+  #mobile-menu.is-open > .mobile-menu-links > a {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
   }
 
   /* Centered Underline Indicator */
-  #mobile-menu > a::after {
+  #mobile-menu > .mobile-menu-links > a::after {
     content: "" !important;
     position: absolute !important;
     bottom: -2px !important;
@@ -520,26 +546,26 @@ img {
   }
 
   /* Hover & Active / Tap Animation */
-  #mobile-menu > a:hover,
-  #mobile-menu > a:active {
+  #mobile-menu > .mobile-menu-links > a:hover,
+  #mobile-menu > .mobile-menu-links > a:active {
     transform: scale(1.05) translateZ(0) !important;
     color: #F08CAE !important;
     text-shadow: 0 0 10px rgba(240, 140, 174, 0.4) !important;
   }
 
-  #mobile-menu > a:hover::after {
+  #mobile-menu > .mobile-menu-links > a:hover::after {
     width: 30% !important;
   }
 
   /* Active page styling */
-  #mobile-menu > a.text-primary {
+  #mobile-menu > .mobile-menu-links > a.text-primary {
     color: #F08CAE !important;
-    font-weight: 400 !important;
+    font-weight: 500 !important;
     text-shadow: 0 0 12px rgba(240, 140, 174, 0.5) !important;
     border: none !important; /* Clear old left border */
   }
 
-  #mobile-menu > a.text-primary::after {
+  #mobile-menu > .mobile-menu-links > a.text-primary::after {
     content: "" !important;
     position: absolute !important;
     bottom: -2px !important;
@@ -552,22 +578,21 @@ img {
   /* Position CTA and Social icons relatively in flow to prevent overlap */
   #mobile-menu > div.pt-4 {
     position: relative !important;
-    width: 90% !important;
-    max-width: 320px !important;
+    width: 100% !important;
     border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
     padding-top: 32px !important;
-    margin-top: 32px !important;
+    margin-top: 50px !important; /* Space between last menu item and CTA button */
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    gap: 32px !important;
+    gap: 40px !important; /* Space between CTA button and social icons: 40px */
     flex-shrink: 0 !important;
   }
 
   /* Style Book Appointment Link to take 85-90% width */
   #mobile-menu > div.pt-4 > a.block {
-    width: 100% !important;
-    max-width: 290px !important;
+    width: 90% !important;
+    max-width: 340px !important;
     display: block !important;
   }
 
@@ -580,15 +605,15 @@ img {
     letter-spacing: 0.2em !important;
   }
 
-  /* Social Icons Row */
+  /* Social Icons Row at the bottom */
   #mobile-menu > div.pt-4 > div.flex {
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 12px !important;
+    gap: 20px !important; /* Equal spacing between icons: 20–24px */
     width: 100% !important;
-    max-width: 320px !important;
+    max-width: 340px !important;
     padding-top: 0 !important;
     margin-top: 0 !important;
   }

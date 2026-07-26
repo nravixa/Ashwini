@@ -192,28 +192,40 @@ const Navbar = React.memo(function Navbar() {
                 : "opacity-0 -translate-y-4 pointer-events-none"
             }`}
           >
-            {navLinks.map((link, index) => {
-              const isActive =
-                link.href === "/"
-                  ? pathname === "/"
-                  : pathname === link.href || pathname.startsWith(link.href + "/");
-              return (
-                <Link key={link.name}
-                  to={link.href}
-                  onClick={() => handleLinkClick(link.href)}
-                  style={{
-                    transitionDelay: isOpen ? `${index * 45}ms` : "0ms"
-                  }}
-                  className={`font-sans text-sm uppercase tracking-widest transition-colors duration-300 ${
-                    isActive
-                      ? "text-primary font-bold border-l-2 border-primary pl-3"
-                      : "text-white/70 hover:text-white pl-3"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
+            {/* Top Section: Centered Logo */}
+            <div className="mobile-menu-logo">
+              <Link to="/" onClick={() => setIsOpen(false)} className="font-display text-2xl font-bold tracking-widest text-white uppercase">
+                ASHWINI SALON
+              </Link>
+            </div>
+
+            {/* Center Section: Centered Links Group */}
+            <div className="mobile-menu-links flex flex-col items-center justify-center">
+              {navLinks.map((link, index) => {
+                const isActive =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : pathname === link.href || pathname.startsWith(link.href + "/");
+                return (
+                  <Link key={link.name}
+                    to={link.href}
+                    onClick={() => handleLinkClick(link.href)}
+                    style={{
+                      transitionDelay: isOpen ? `${index * 45}ms` : "0ms"
+                    }}
+                    className={`font-sans text-sm uppercase tracking-widest transition-colors duration-300 ${
+                      isActive
+                        ? "text-primary font-bold border-l-2 border-primary pl-3"
+                        : "text-white/70 hover:text-white pl-3"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Bottom Section: CTA & Social Icons */}
             <div 
               style={{
                 transitionDelay: isOpen ? "360ms" : "0ms"
