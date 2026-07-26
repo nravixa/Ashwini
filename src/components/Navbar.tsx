@@ -150,7 +150,7 @@ const Navbar = React.memo(function Navbar() {
           </div>
  
           {/* Mobile Actions: Cart Icon + Hamburger Toggle */}
-          <div className="flex items-center gap-2 xl:hidden">
+          <div className="flex items-center gap-2 xl:hidden ml-auto">
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 rounded-xl border border-white/10 bg-white/5 text-white flex items-center justify-center cursor-pointer"

@@ -24,7 +24,32 @@ const serviceOptions = [
 
 const timeSlots = ["09:00 AM", "11:30 AM", "02:00 PM", "04:30 PM", "06:00 PM"];
 
+const MapComponent = React.lazy(() => import("@/registry/map").then(m => ({ default: m.Map })));
+const MapMarkerComponent = React.lazy(() => import("@/registry/map").then(m => ({ default: m.MapMarker })));
+const MarkerContentComponent = React.lazy(() => import("@/registry/map").then(m => ({ default: m.MarkerContent })));
+const MapPopupComponent = React.lazy(() => import("@/registry/map").then(m => ({ default: m.MapPopup })));
+
 export default function ContactPage() {
+  const [mapInView, setMapInView] = useState(false);
+  const mapRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMapInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    if (mapRef.current) {
+      observer.observe(mapRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -427,30 +452,93 @@ ${formData.name.trim() || "Customer"}`;
             </a>
           </div>
 
-          <a
-            href="https://maps.app.goo.gl/E9bVYJWumFyUvrwW7"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative block w-full h-[450px] md:h-[500px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-white/5 group cursor-pointer"
-            aria-label="View Ashwini Salon exact location on Google Maps in a new tab"
+          <div
+            ref={mapRef}
+            className="relative block w-full h-[350px] sm:h-[450px] md:h-[500px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#0a0814] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(240,140,174,0.15)]"
           >
-            <iframe
-              title="Ashwini Beauty & Salon Google Map"
-              src="https://maps.google.com/maps?q=Shop+no+10,+Dodke+Plazzo,+near+Wander+Futura,+Kothrud,+Pune,+Maharashtra+411038&t=&z=16&ie=UTF8&iwloc=&output=embed"
-              width="100%"
-              height="100%"
-              style={{ border: 0, pointerEvents: "none" }}
-              loading="lazy"
-              className="w-full h-full object-cover"
-            />
-            {/* Clickable luxury overlay with visual prompt on hover */}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-              <div className="bg-background/95 text-white font-sans text-[10px] sm:text-xs uppercase tracking-widest px-6 py-3 rounded-full border border-white/10 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transition-all duration-300 shadow-xl flex items-center gap-2">
-                <span>Open in Google Maps</span>
-                <ExternalLink className="w-3.5 h-3.5 text-rose-gold" />
+            {mapInView ? (
+              <React.Suspense
+                fallback={
+                  <div className="w-full h-full flex items-center justify-center text-white/50 font-sans text-xs">
+                    <Loader2 className="w-5 h-5 animate-spin mr-2 text-rose-gold" />
+                    <span>Loading Premium Map...</span>
+                  </div>
+                }
+              >
+                <MapComponent
+                  center={[73.7897774, 18.4978166]}
+                  zoom={15}
+                  theme="dark"
+                  dragRotate={false}
+                  pitchWithRotate={false}
+                  maxPitch={0}
+                  className="w-full h-full"
+                >
+                  <MapMarkerComponent
+                    longitude={73.7897774}
+                    latitude={18.4978166}
+                    onClick={() => window.open("https://maps.app.goo.gl/E9bVYJWumFyUvrwW7", "_blank", "noopener,noreferrer")}
+                  >
+                    <MarkerContentComponent>
+                      <div className="relative group flex items-center justify-center cursor-pointer">
+                        {/* Outer glowing ripple ring */}
+                        <span className="absolute inline-flex h-8 w-8 rounded-full bg-[#F08CAE]/30 animate-ping opacity-75"></span>
+                        
+                        {/* Inner glowing pulse ring */}
+                        <span className="absolute inline-flex h-6 w-6 rounded-full bg-[#F08CAE]/20 animate-pulse"></span>
+                        
+                        {/* Solid center dot */}
+                        <div className="relative h-4.5 w-4.5 rounded-full border-2 border-white bg-[#F08CAE] shadow-lg transition-transform duration-300 group-hover:scale-125 flex items-center justify-center">
+                          <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                        </div>
+                      </div>
+                    </MarkerContentComponent>
+                  </MapMarkerComponent>
+                  
+                  <MapPopupComponent
+                    longitude={73.7897774}
+                    latitude={18.4978166}
+                    closeButton={false}
+                    offset={25}
+                    className="glass-card border border-white/10 p-5 rounded-2xl shadow-xl bg-background/80 backdrop-blur-md max-w-[280px]"
+                  >
+                    <div className="space-y-3 text-white">
+                      <div className="border-b border-white/10 pb-2">
+                        <h4 className="font-display text-lg font-bold tracking-wide text-rose-gold">Ashwini Salon</h4>
+                        <p className="font-sans text-[10px] text-white/50 uppercase tracking-wider font-semibold">Premium Beauty & Salon</p>
+                      </div>
+                      
+                      <div className="space-y-1.5 font-sans text-xs">
+                        <p className="flex items-start gap-1.5 text-white/90">
+                          <span className="shrink-0 mt-0.5">📍</span>
+                          <span>Kothrud, Pune</span>
+                        </p>
+                        <p className="flex items-center gap-1.5 text-white/70">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#1ebd59] animate-pulse mr-1" />
+                          <span>Open Daily: 10:00 AM – 8:00 PM</span>
+                        </p>
+                      </div>
+
+                      <a
+                        href="https://maps.app.goo.gl/E9bVYJWumFyUvrwW7"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 font-sans text-xs font-bold uppercase tracking-widest text-rose-gold hover:text-white transition-colors mt-2"
+                      >
+                        <span>Get Directions</span>
+                        <span>→</span>
+                      </a>
+                    </div>
+                  </MapPopupComponent>
+                </MapComponent>
+              </React.Suspense>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-white/50 font-sans text-xs">
+                <Loader2 className="w-5 h-5 animate-spin mr-2 text-rose-gold" />
+                <span>Loading Premium Map...</span>
               </div>
-            </div>
-          </a>
+            )}
+          </div>
         </div>
       </section>
     </main>

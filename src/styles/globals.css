@@ -674,3 +674,30 @@ img {
   }
 }
 
+/* Premium MapLibre Glassmorphism Popup styling */
+.maplibregl-popup-content {
+  background: rgba(16, 12, 30, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;
+  padding: 0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: rgba(16, 12, 30, 0.85) !important;
+}
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: rgba(16, 12, 30, 0.85) !important;
+}
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: rgba(16, 12, 30, 0.85) !important;
+}
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: rgba(16, 12, 30, 0.85) !important;
+}
+.maplibregl-popup-close-button {
+  display: none !important;
+}
+
