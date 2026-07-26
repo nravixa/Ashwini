@@ -12,18 +12,18 @@ import serviceHeroImg from "@/components/images/service_page.jpeg?optimized";
 import transformationImg from "@/components/images/transformation_image.jpg?optimized";
 
 // Local image imports for services
-import signatureCutImg from "@/components/images/Hair_Artistry.jpg?optimized";
-import highlightsImg from "@/components/images/Hair_Artistry1.jpg?optimized";
-import keratinTreatmentImg from "@/components/images/Hair_Artistry.jpg?optimized";
-import glowFacialImg from "@/components/images/Skin&Spa.jpg?optimized";
-import oxygenImg from "@/components/images/Sanctuary.jpg?optimized";
-import hydrafacialImg from "@/components/images/Skin&Spa.jpg?optimized";
-import manicureImg from "@/components/images/Product_Rituals.jpg?optimized";
-import gelOverlaysImg from "@/components/images/Product_Rituals.jpg?optimized";
-import signatureEditorialImg from "@/components/images/luxury_makeup.jpg?optimized";
-import bridalImg from "@/components/images/Bridal_Suite.jpg?optimized";
-import hotStoneImg from "@/components/images/Skin&Spa.jpg?optimized";
-import detoxImg from "@/components/images/Sanctuary.jpg?optimized";
+import signatureCutImg from "@/components/images/Signature.jpg?optimized";
+import highlightsImg from "@/components/images/Highlights.jpg?optimized";
+import keratinTreatmentImg from "@/components/images/kertain.jpg?optimized";
+import glowFacialImg from "@/components/images/Skin&Spa.jpg?optimized"; // Kept default for #1 since user specified #2 and #3
+import oxygenImg from "@/components/images/oxygen.jpg?optimized";
+import hydrafacialImg from "@/components/images/hydra.jpg?optimized";
+import manicureImg from "@/components/images/nail_1.jpg?optimized";
+import gelOverlaysImg from "@/components/images/nail_2.jpg?optimized";
+import signatureEditorialImg from "@/components/images/makeover.jpg?optimized";
+import bridalImg from "@/components/images/bride.jpg?optimized";
+import hotStoneImg from "@/components/images/stone.jpg?optimized";
+import detoxImg from "@/components/images/detox.jpg?optimized";
 
 
 const servicesData = {
