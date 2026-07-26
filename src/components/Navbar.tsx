@@ -174,7 +174,6 @@ const Navbar = React.memo(function Navbar() {
           </div>
         </div>
 
-          {isOpen && (
           <div
             id="mobile-menu"
             aria-hidden={!isOpen}
