@@ -7,6 +7,10 @@ interface FormSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> 
   required?: boolean;
   options: { value: string; label: string }[];
   placeholder?: string;
+  name?: string;
+  value?: any;
+  onChange?: (e: any) => void;
+  className?: string;
 }
 
 export default function FormSelect({ label, error, required, options, placeholder, className = "", ...props }: FormSelectProps) {

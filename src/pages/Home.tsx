@@ -115,13 +115,25 @@ const HomePage = React.memo(function HomePage() {
     let currentX = 0;
     let lastTime = performance.now();
     const speed = 40; // Pixels per second
+    let isInView = false;
+
+    const track = trackRef.current;
+    if (!track) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isInView = entry.isIntersecting;
+        if (isInView) {
+          lastTime = performance.now(); // reset timer to avoid jump on re-entry
+        }
+      },
+      { rootMargin: "100px" }
+    );
+    observer.observe(track);
     
     const animate = (time: number) => {
-      const delta = (time - lastTime) / 1000;
-      lastTime = time;
-
-      const track = trackRef.current;
-      if (track && !isHoveredRef.current && track.firstElementChild) {
+      if (isInView && !isHoveredRef.current && track.firstElementChild) {
+        const delta = (time - lastTime) / 1000;
         currentX += speed * delta;
 
         // Get the exact width of one set of testimonials including its padding/gap
@@ -133,12 +145,15 @@ const HomePage = React.memo(function HomePage() {
 
         track.style.transform = `translate3d(-${currentX}px, 0, 0)`;
       }
-      
+      lastTime = time;
       animationFrameId = requestAnimationFrame(animate);
     };
     
     animationFrameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrameId);
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
+    };
   }, [reviewsList]);
 
   const handleReviewSubmit = (e: React.FormEvent) => {

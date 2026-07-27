@@ -4,6 +4,13 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
   required?: boolean;
+  type?: string;
+  name?: string;
+  value?: any;
+  onChange?: (e: any) => void;
+  placeholder?: string;
+  min?: string;
+  className?: string;
 }
 
 export default function FormInput({ label, error, required, className = "", ...props }: FormInputProps) {

@@ -93,7 +93,7 @@ export default function ContactPage() {
     });
     // Clear field error on change
     if (errors[key]) {
-      setErrors((prev) => ({ ...prev, [key]: "" }));
+      setErrors((prev: Record<string, string>) => ({ ...prev, [key]: "" }));
     }
   };
 
