@@ -2,10 +2,9 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Menu, X, Calendar, ShoppingBag } from "lucide-react";
-import { WHATSAPP_LINK, INSTAGRAM_LINK, FACEBOOK_LINK } from "@/lib/whatsapp";
+import { INSTAGRAM_LINK, FACEBOOK_LINK } from "@/lib/whatsapp";
 import { useCart } from "@/context/CartContext";
 import SmokyButton from "@/components/ui/SmokyButton";
-import WhatsAppIcon from "./WhatsAppIcon";
 
 
 const navLinks = [
@@ -272,17 +271,6 @@ const Navbar = React.memo(function Navbar() {
 
           {/* Social Icons */}
           <div className="flex items-center justify-center gap-5 py-4 border-t border-white/10 shrink-0">
-            {/* WhatsApp */}
-            <a
-              href={WHATSAPP_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={closeMenu}
-              aria-label="WhatsApp"
-              className="w-10 h-10 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 hover:text-[#25D366] hover:border-[#25D366]/40 hover:bg-[#25D366]/10 active:scale-90 transition-all duration-200"
-            >
-              <WhatsAppIcon className="w-4.5 h-4.5" />
-            </a>
 
             {/* Instagram */}
             <a

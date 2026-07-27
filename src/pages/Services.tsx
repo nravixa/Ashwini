@@ -147,10 +147,19 @@ const servicesData = {
 type SectionKey = keyof typeof servicesData;
 
 export default function ServicesPage() {
-  const [activeSection, setActiveSection] = useState<SectionKey>("hair");
+  const [activeSection, setActiveSection] = useState<SectionKey | "all">("hair");
   const [navbarHeight, setNavbarHeight] = useState(80);
   const [isMobile, setIsMobile] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Synchronize default category active state between mobile ("all") and desktop/tablet ("hair")
+  useEffect(() => {
+    if (isMobile) {
+      setActiveSection("all");
+    } else {
+      setActiveSection("hair");
+    }
+  }, [isMobile]);
 
   // Resize listener to track mobile breakpoint for sticky offsets
   useEffect(() => {
@@ -236,7 +245,7 @@ export default function ServicesPage() {
     }
   }, [activeSection, isMobile]);
 
-  const scrollToSection = (id: SectionKey) => {
+  const scrollToSection = (id: SectionKey | "all") => {
     if (isMobile) {
       if (id === activeSection) return;
       setIsTransitioning(true);
@@ -253,6 +262,7 @@ export default function ServicesPage() {
         setIsTransitioning(false);
       }, 250);
     } else {
+      if (id === "all") return;
       setActiveSection(id);
       const element = document.getElementById(id);
       if (element) {
@@ -315,6 +325,23 @@ export default function ServicesPage() {
         >
           {/* Mobile view (<768px): Vertical centered list with generous spacing */}
           <div className="md:hidden flex flex-col items-center justify-center gap-4 py-6">
+            {/* All Services button */}
+            <button
+              onClick={() => scrollToSection("all")}
+              className={`relative font-sans text-xs uppercase tracking-[0.25em] transition-all duration-300 py-1.5 ${
+                activeSection === "all" ? "text-rose-gold font-bold scale-105" : "text-white/60 font-normal hover:text-white"
+              }`}
+            >
+              All Services
+              {activeSection === "all" && (
+                <motion.span
+                  layoutId="activeUnderline"
+                  className="absolute bottom-0 left-4 right-4 h-[1.5px] bg-rose-gold rounded-full shadow-[0_0_8px_rgba(240,140,174,0.8)]"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+            </button>
+
             {(Object.keys(servicesData) as SectionKey[]).map((key) => {
               const active = activeSection === key;
               const section = servicesData[key];
@@ -416,16 +443,19 @@ export default function ServicesPage() {
         {/* Main Services Content Area (Right Side - Mobile, Tablet, Desktop) */}
         <div id="services-content-anchor" className="flex-1 min-w-0 space-y-10 sm:space-y-16 lg:space-y-24">
           {isMobile ? (
-            // Mobile view: Render ONLY the active category with transition animation
-            (() => {
-              const section = servicesData[activeSection];
-              return (
-                <div className="space-y-6">
-                  <div className={`transition-all duration-300 transform ${isTransitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}>
+            // Mobile view: Render active category or all categories
+            <div className="space-y-12">
+              <div className={`transition-all duration-300 transform ${isTransitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}>
+                {(Object.keys(servicesData) as SectionKey[]).map((key) => {
+                  const show = activeSection === "all" || activeSection === key;
+                  if (!show) return null;
+                  const section = servicesData[key];
+                  return (
                     <AnimatedSection
-                      key={activeSection}
-                      id={activeSection}
+                      key={key}
+                      id={key}
                       style={{ scrollMarginTop: `${navbarHeight + 75}px` }}
+                      className="mb-10 last:mb-0"
                     >
                       <div className="flex items-baseline gap-4 mb-6 sm:mb-8 border-b border-outline-variant/10 pb-2 sm:pb-3">
                         <AnimatedHeading
@@ -453,10 +483,10 @@ export default function ServicesPage() {
                         ))}
                       </div>
                     </AnimatedSection>
-                  </div>
-                </div>
-              );
-            })()
+                  );
+                })}
+              </div>
+            </div>
           ) : (
             // Desktop/Tablet view: Render all categories
             (Object.keys(servicesData) as SectionKey[]).map((key) => {

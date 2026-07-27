@@ -9,12 +9,28 @@ const FloatingWhatsApp = React.memo(function FloatingWhatsApp() {
   const pathname = useLocation().pathname;
   const isHome = pathname === "/";
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     // Wait for initial layout to settle before showing
     const timer = setTimeout(() => setIsReady(true), 500);
 
+    // Initial check for mobile menu state (from scroll lock style)
+    setIsMenuOpen(document.body.style.position === "fixed");
+
+    // MutationObserver to hide/show when mobile menu changes body scroll lock styles
+    const observer = new MutationObserver(() => {
+      setIsMenuOpen(document.body.style.position === "fixed");
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["style"],
+    });
+
     return () => {
       clearTimeout(timer);
+      observer.disconnect();
     };
   }, []);
 
@@ -70,7 +86,7 @@ const FloatingWhatsApp = React.memo(function FloatingWhatsApp() {
 
   return (
     <>
-      {isReady && !isHome && isVisible && (
+      {isReady && !isHome && isVisible && !isMenuOpen && (
         <div
           className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center"
         >
