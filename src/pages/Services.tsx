@@ -154,7 +154,7 @@ export default function ServicesPage() {
   // Resize listener to track mobile breakpoint for sticky offsets
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
+      setIsMobile(window.innerWidth < 768);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -371,14 +371,37 @@ export default function ServicesPage() {
 
       {/* Services Main Container */}
       <div className="px-6 md:px-16 max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-10 mt-6 lg:mt-10">
-        {/* Mobile/Tablet Category Chips (<1024px) - STICKY OVERLAY CONTAINER */}
+        {/* Mobile/Tablet Category Navigation (<1024px) - STICKY OVERLAY CONTAINER */}
         <div 
-          className="w-full lg:hidden sticky z-30 bg-background/90 backdrop-blur-md py-3 -mx-6 px-6 border-b border-white/10 mb-6"
+          className="w-full lg:hidden sticky z-30 bg-background/95 backdrop-blur-md border-b border-white/10 mb-6"
           style={{ top: `${navbarHeight}px` }}
         >
+          {/* Mobile view (<768px): Vertical centered list with generous spacing */}
+          <div className="md:hidden flex flex-col items-center justify-center gap-4 py-6">
+            {(Object.keys(servicesData) as SectionKey[]).map((key) => {
+              const active = activeSection === key;
+              const section = servicesData[key];
+              return (
+                <button
+                  key={key}
+                  onClick={() => scrollToSection(key)}
+                  className={`relative font-sans text-xs uppercase tracking-[0.25em] transition-all duration-300 py-1 ${
+                    active ? "text-rose-gold font-bold scale-105" : "text-white/60 font-normal hover:text-white"
+                  }`}
+                >
+                  {section.title}
+                  {active && (
+                    <span className="absolute bottom-0 left-4 right-4 h-[1.5px] bg-rose-gold rounded-full shadow-[0_0_8px_rgba(240,140,174,0.8)]" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Tablet view (768px - 1023px): Horizontal chips as before */}
           <div
             id="mobile-chips-container"
-            className="glass-card p-1.5 flex flex-row overflow-x-auto gap-1.5 no-scrollbar w-full scroll-smooth"
+            className="hidden md:flex glass-card p-1.5 flex-row overflow-x-auto gap-1.5 no-scrollbar w-full scroll-smooth my-3"
           >
             {(Object.keys(servicesData) as SectionKey[]).map((key) => {
               const active = activeSection === key;

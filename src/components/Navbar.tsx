@@ -97,7 +97,7 @@ const Navbar = React.memo(function Navbar() {
           <Link
             to="/"
             onClick={() => handleLinkClick("/")}
-            className="font-display text-sm sm:text-base md:text-lg font-medium tracking-[0.12em] sm:tracking-[0.15em] text-white uppercase shrink-0"
+            className="font-display text-sm sm:text-base md:text-lg font-bold tracking-[0.12em] sm:tracking-[0.15em] text-white uppercase shrink-0"
           >
             ASHWINI SALON
           </Link>
@@ -191,21 +191,33 @@ const Navbar = React.memo(function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown — positioned relative to nav */}
+        {/* Mobile Menu Dropdown — Fixed Full-Screen overlay */}
         <div
           id="mobile-menu"
           aria-hidden={!isOpen}
-          className={`absolute top-[calc(100%+10px)] left-3 right-3 sm:left-4 sm:right-4 z-50 xl:hidden
-            premium-glass border border-white/20 shadow-2xl rounded-3xl
-            flex flex-col overflow-hidden
-            transition-all duration-300 ease-out will-change-transform
+          className={`fixed inset-0 z-50 xl:hidden bg-background px-6 py-6 flex flex-col justify-between overflow-y-auto
+            transition-all duration-300 ease-out
             ${isOpen
-              ? "opacity-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 -translate-y-3 pointer-events-none"
+              ? "opacity-100 translate-x-0 pointer-events-auto"
+              : "opacity-0 translate-x-4 pointer-events-none"
             }`}
         >
-          {/* Nav Links */}
-          <div className="flex flex-col items-center justify-center gap-1 px-6 pt-7 pb-5">
+          {/* Header Row */}
+          <div className="flex items-center justify-between pb-6 border-b border-white/10 shrink-0">
+            <span className="font-display text-sm sm:text-base font-bold tracking-[0.12em] sm:tracking-[0.15em] text-white uppercase">
+              ASHWINI SALON
+            </span>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-white p-2 focus:outline-none"
+              aria-label="Close Menu"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Centered Nav Links */}
+          <div className="flex flex-col items-center justify-center gap-1.5 py-6 flex-grow">
             {navLinks.map((link, index) => {
               const isActive =
                 link.href === "/"
@@ -217,7 +229,7 @@ const Navbar = React.memo(function Navbar() {
                   to={link.href}
                   onClick={() => handleLinkClick(link.href)}
                   style={{
-                    transitionDelay: isOpen ? `${index * 40}ms` : "0ms",
+                    transitionDelay: isOpen ? `${index * 35}ms` : "0ms",
                   }}
                   className={`w-full text-center font-sans text-sm uppercase tracking-widest py-3 rounded-xl transition-all duration-300 ${
                     isActive
@@ -231,16 +243,13 @@ const Navbar = React.memo(function Navbar() {
             })}
           </div>
 
-          {/* Divider */}
-          <div className="mx-6 h-px bg-white/10" />
-
           {/* Book Now CTA */}
-          <div className="px-6 py-5">
+          <div className="py-4 border-t border-white/10 shrink-0">
             <Link to="/book" onClick={closeMenu} className="block w-full">
               <SmokyButton
                 variant="primary"
                 as="div"
-                className="w-full py-3.5 font-sans text-xs uppercase tracking-widest flex items-center justify-center gap-2"
+                className="w-full py-4 font-sans text-xs uppercase tracking-widest flex items-center justify-center gap-2"
               >
                 <Calendar className="w-3.5 h-3.5" />
                 <span>Book Appointment</span>
@@ -248,11 +257,8 @@ const Navbar = React.memo(function Navbar() {
             </Link>
           </div>
 
-          {/* Divider */}
-          <div className="mx-6 h-px bg-white/10" />
-
           {/* Social Icons */}
-          <div className="flex items-center justify-center gap-5 px-6 py-5">
+          <div className="flex items-center justify-center gap-5 py-4 border-t border-white/10 shrink-0">
             {/* WhatsApp */}
             <a
               href={WHATSAPP_LINK}
