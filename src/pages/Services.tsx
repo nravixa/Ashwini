@@ -149,6 +149,7 @@ export default function ServicesPage() {
   const [activeSection, setActiveSection] = useState<SectionKey>("hair");
   const [navbarHeight, setNavbarHeight] = useState(80);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Resize listener to track mobile breakpoint for sticky offsets
   useEffect(() => {
@@ -227,34 +228,42 @@ export default function ServicesPage() {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !isTransitioning) {
           if (entry.target.id === "mobile-next-trigger") {
             if (currentIndex < sectionKeys.length - 1) {
               const nextKey = sectionKeys[currentIndex + 1];
-              setActiveSection(nextKey);
-              // Instantly snap to the top of services container for continuity
-              const anchor = document.getElementById("services-content-anchor");
-              if (anchor) {
-                const offset = navbarHeight + 85;
-                window.scrollTo({
-                  top: anchor.getBoundingClientRect().top + window.scrollY - offset,
-                  behavior: "instant" as any,
-                });
-              }
+              setIsTransitioning(true);
+              setTimeout(() => {
+                setActiveSection(nextKey);
+                // Instantly snap to the top of services container for continuity
+                const anchor = document.getElementById("services-content-anchor");
+                if (anchor) {
+                  const offset = navbarHeight + 85;
+                  window.scrollTo({
+                    top: anchor.getBoundingClientRect().top + window.scrollY - offset,
+                    behavior: "instant" as any,
+                  });
+                }
+                setIsTransitioning(false);
+              }, 200);
             }
           } else if (entry.target.id === "mobile-prev-trigger") {
             if (currentIndex > 0) {
               const prevKey = sectionKeys[currentIndex - 1];
-              setActiveSection(prevKey);
-              // Instantly snap to the top of services container
-              const anchor = document.getElementById("services-content-anchor");
-              if (anchor) {
-                const offset = navbarHeight + 85;
-                window.scrollTo({
-                  top: anchor.getBoundingClientRect().top + window.scrollY - offset,
-                  behavior: "instant" as any,
-                });
-              }
+              setIsTransitioning(true);
+              setTimeout(() => {
+                setActiveSection(prevKey);
+                // Instantly snap to the top of services container
+                const anchor = document.getElementById("services-content-anchor");
+                if (anchor) {
+                  const offset = navbarHeight + 85;
+                  window.scrollTo({
+                    top: anchor.getBoundingClientRect().top + window.scrollY - offset,
+                    behavior: "instant" as any,
+                  });
+                }
+                setIsTransitioning(false);
+              }, 200);
             }
           }
         }
@@ -268,7 +277,7 @@ export default function ServicesPage() {
     if (prevTrigger) observer.observe(prevTrigger);
 
     return () => observer.disconnect();
-  }, [activeSection, isMobile, navbarHeight]);
+  }, [activeSection, isMobile, navbarHeight, isTransitioning]);
 
   // Auto-scroll the active category pill into view on mobile/tablet
   useEffect(() => {
@@ -291,9 +300,11 @@ export default function ServicesPage() {
   }, [activeSection]);
 
   const scrollToSection = (id: SectionKey) => {
-    setActiveSection(id);
     if (isMobile) {
+      if (id === activeSection) return;
+      setIsTransitioning(true);
       setTimeout(() => {
+        setActiveSection(id);
         const anchor = document.getElementById("services-content-anchor");
         if (anchor) {
           const offset = navbarHeight + 85;
@@ -302,8 +313,10 @@ export default function ServicesPage() {
             behavior: "smooth",
           });
         }
-      }, 50);
+        setIsTransitioning(false);
+      }, 200);
     } else {
+      setActiveSection(id);
       const element = document.getElementById(id);
       if (element) {
         const bodyRect = document.body.getBoundingClientRect().top;
@@ -439,7 +452,7 @@ export default function ServicesPage() {
         {/* Main Services Content Area (Right Side - Mobile, Tablet, Desktop) */}
         <div id="services-content-anchor" className="flex-1 min-w-0 space-y-10 sm:space-y-16 lg:space-y-24">
           {isMobile ? (
-            // Mobile view: Render ONLY the active category
+            // Mobile view: Render ONLY the active category with transition animation
             (() => {
               const section = servicesData[activeSection];
               const sectionKeys = Object.keys(servicesData) as SectionKey[];
@@ -451,37 +464,39 @@ export default function ServicesPage() {
                     <div id="mobile-prev-trigger" className="h-2 w-full bg-transparent pointer-events-none" />
                   )}
 
-                  <AnimatedSection
-                    key={activeSection}
-                    id={activeSection}
-                    style={{ scrollMarginTop: `${navbarHeight + 75}px` }}
-                  >
-                    <div className="flex items-baseline gap-4 mb-6 sm:mb-8 border-b border-outline-variant/10 pb-2 sm:pb-3">
-                      <AnimatedHeading
-                        text={section.title}
-                        as="h2"
-                        className="font-display text-xl sm:text-2xl md:text-4xl font-medium text-white"
-                      />
-                      <span className="text-white/70 font-sans text-xs md:text-sm tracking-wider font-semibold">
-                        {section.indexLabel}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 content-auto contain-strict">
-                      {section.items.map((item, idx) => (
-                        <ServiceCard
-                          key={idx}
-                          title={item.title}
-                          description={item.description}
-                          imageUrl={item.imageUrl}
-                          duration={item.duration}
-                          price={item.price}
-                          category={section.title}
-                          index={idx}
+                  <div className={`transition-all duration-300 transform ${isTransitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}>
+                    <AnimatedSection
+                      key={activeSection}
+                      id={activeSection}
+                      style={{ scrollMarginTop: `${navbarHeight + 75}px` }}
+                    >
+                      <div className="flex items-baseline gap-4 mb-6 sm:mb-8 border-b border-outline-variant/10 pb-2 sm:pb-3">
+                        <AnimatedHeading
+                          text={section.title}
+                          as="h2"
+                          className="font-display text-xl sm:text-2xl md:text-4xl font-medium text-white"
                         />
-                      ))}
-                    </div>
-                  </AnimatedSection>
+                        <span className="text-white/70 font-sans text-xs md:text-sm tracking-wider font-semibold">
+                          {section.indexLabel}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 content-auto contain-strict">
+                        {section.items.map((item, idx) => (
+                          <ServiceCard
+                            key={idx}
+                            title={item.title}
+                            description={item.description}
+                            imageUrl={item.imageUrl}
+                            duration={item.duration}
+                            price={item.price}
+                            category={section.title}
+                            index={idx}
+                          />
+                        ))}
+                      </div>
+                    </AnimatedSection>
+                  </div>
 
                   {/* Bottom trigger for scrolling down */}
                   {currentIndex < sectionKeys.length - 1 && (
