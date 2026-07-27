@@ -154,7 +154,7 @@ const faqData = [
 
 export default function MembershipPage() {
   return (
-    <main className="pb-32 bg-background text-white relative overflow-hidden">
+    <main className="pb-16 md:pb-24 xl:pb-32 bg-background text-white relative overflow-hidden">
       <SEO 
         title="Membership"
         description="Join the Ashwini Salon membership program for exclusive benefits, complimentary treatments, and priority booking."
@@ -165,7 +165,7 @@ export default function MembershipPage() {
       <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] glow-orb-primary rounded-full pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[450px] w-full flex items-center overflow-hidden bg-black mb-24">
+      <section className="relative h-[60vh] min-h-[450px] w-full flex items-center overflow-hidden bg-black mb-12 md:mb-16 xl:mb-24">
         <div className="absolute inset-0 z-0 w-full h-full">
           <Image
             src={gallery2Img}
@@ -194,8 +194,8 @@ export default function MembershipPage() {
       </section>
 
       {/* Membership Plans Grid */}
-      <section className="px-6 md:px-16 max-w-[1440px] mx-auto mb-32 relative z-10">
-        <div className="text-center mb-20">
+      <section className="px-6 md:px-16 max-w-[1440px] mx-auto mb-16 md:mb-24 xl:mb-32 relative z-10">
+        <div className="text-center mb-12 md:mb-16 xl:mb-20">
           <span className="font-sans text-xs text-rose-gold uppercase tracking-widest block mb-4 font-semibold">
             Choose Your Tier
           </span>
@@ -216,7 +216,7 @@ export default function MembershipPage() {
                   ? "border-rose-gold/45 shadow-[0_15px_40px_-10px_rgba(240,140,174,0.15)] bg-white/[0.04]" 
                   : "border-white/10 shadow-xl"
               }`}
-              innerClassName="p-8 md:p-10 flex flex-col h-full"
+              innerClassName="p-6 sm:p-8 xl:p-10 flex flex-col h-full"
             >
               {plan.popular && (
                 <div className="absolute top-4 right-4 bg-rose-gold text-white card-label !text-[10px] px-4 py-1.5 rounded-full shadow-md z-20">

@@ -86,14 +86,14 @@ export default function TestimonialsPage() {
   };
 
   return (
-    <main className="pt-32 pb-32">
+    <main className="pt-20 sm:pt-28 md:pt-32 pb-16 md:pb-24 xl:pb-32">
       <SEO 
         title="Client Testimonials"
         description="Read what our clients say about their luxury experiences at Ashwini Salon. Unmatched artistry and dedication."
         canonical="/testimonials"
       />
       {/* Header */}
-      <AnimatedSection className="px-6 md:px-16 max-w-[1440px] mx-auto mb-20">
+      <AnimatedSection className="px-6 md:px-16 max-w-[1440px] mx-auto mb-12 md:mb-16 xl:mb-20">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="max-w-2xl">
             <span className="font-sans text-xs text-secondary uppercase tracking-[0.3em] block mb-4 font-semibold">
@@ -122,13 +122,13 @@ export default function TestimonialsPage() {
       </AnimatedSection>
 
       {/* Reviews Grid */}
-      <section className="px-6 md:px-16 max-w-[1440px] mx-auto mb-20">
+      <section className="px-6 md:px-16 max-w-[1440px] mx-auto mb-12 md:mb-16 xl:mb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {reviews.map((test, index) => (
             <AnimatedCard
               key={index}
               index={index}
-              className="glass-card p-10 border border-white/60 shadow-sm flex flex-col justify-between"
+              className="glass-card p-6 sm:p-8 xl:p-10 border border-white/60 shadow-sm flex flex-col justify-between"
             >
               <div>
                 <div className="flex gap-0.5 mb-6">

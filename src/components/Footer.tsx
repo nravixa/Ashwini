@@ -42,7 +42,7 @@ export default React.memo(function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} id="site-footer" className="relative bg-background text-white pt-32 pb-8 overflow-hidden">
+    <footer ref={footerRef} id="site-footer" className="relative bg-background text-white pt-16 sm:pt-24 md:pt-32 pb-6 md:pb-8 overflow-hidden">
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         <div className="absolute inset-0 w-full h-full bg-[#1D1A31]" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none" />
@@ -59,9 +59,9 @@ export default React.memo(function Footer() {
       <div
         className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-16"
       >
-        <div className="glass-card p-6 sm:p-10 md:p-16 rounded-[32px] grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-12">
+        <div className="glass-card p-5 sm:p-8 md:p-12 xl:p-16 rounded-[32px] grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 xl:gap-8 mb-12">
           {/* Logo and About */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-5 xl:space-y-6">
             <h3 className="font-display text-2xl font-bold tracking-tighter text-white uppercase">
               ASHWINI BEAUTY & SALON
             </h3>
@@ -120,10 +120,10 @@ export default React.memo(function Footer() {
 
           {/* Contact Details */}
           <div>
-            <h4 className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-rose-gold mb-6">
+            <h4 className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-rose-gold mb-4 xl:mb-6">
               Contact
             </h4>
-            <ul className="space-y-4 font-sans text-sm text-white/70">
+            <ul className="space-y-3 xl:space-y-4 font-sans text-sm text-white/70">
               <li className="flex items-start gap-3">
                 <AnimatedIcon>
                   <MapPin className="w-4 h-4 text-white/70 shrink-0 mt-0.5" />
@@ -158,7 +158,7 @@ export default React.memo(function Footer() {
 
           {/* Hours */}
           <div>
-            <h4 className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-rose-gold mb-6">
+            <h4 className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-rose-gold mb-4 xl:mb-6">
               Studio Hours
             </h4>
             <div className="font-sans text-sm text-white/70 space-y-2">
@@ -168,7 +168,7 @@ export default React.memo(function Footer() {
         </div>
 
         {/* Footer Bottom */}
-        <div className="pt-8 flex flex-col md:flex-row justify-between items-center text-xs tracking-widest text-white/70 gap-4">
+        <div className="pt-6 xl:pt-8 flex flex-col md:flex-row justify-between items-center text-xs tracking-widest text-white/70 gap-4">
           <p>
             © 2026 <a href="https://nravixa.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">NRAVIXA</a>. ALL RIGHTS RESERVED.
           </p>

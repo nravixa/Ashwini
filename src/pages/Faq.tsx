@@ -51,7 +51,7 @@ export default function FAQPage() {
   };
 
   return (
-    <main className="pb-32 bg-background text-white relative overflow-hidden">
+    <main className="pb-16 md:pb-24 xl:pb-32 bg-background text-white relative overflow-hidden">
       <SEO 
         title="FAQ"
         description="Frequently asked questions about Ashwini Salon services, policies, and premium treatments."
@@ -63,7 +63,7 @@ export default function FAQPage() {
       <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] glow-orb-primary rounded-full pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="relative h-[55vh] min-h-[400px] w-full flex items-center overflow-hidden bg-black mb-24">
+      <section className="relative h-[55vh] min-h-[400px] w-full flex items-center overflow-hidden bg-black mb-12 md:mb-16 xl:mb-24">
         <div className="absolute inset-0 z-0 w-full h-full">
           <Image
             src={gallery3Img}
@@ -92,14 +92,14 @@ export default function FAQPage() {
       </section>
 
       {/* Accordions */}
-      <section className="px-6 md:px-16 max-w-[1440px] mx-auto mb-24 relative z-10">
+      <section className="px-6 md:px-16 max-w-[1440px] mx-auto mb-12 md:mb-16 xl:mb-24 relative z-10">
         <FAQAccordion items={faqData} />
       </section>
 
       {/* Help Banner */}
       <section className="px-6 md:px-16 max-w-[1440px] mx-auto relative z-10">
         <AnimatedSection>
-          <div className="glass-card p-10 md:p-16 border border-white/10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 rounded-3xl">
+          <div className="glass-card p-6 sm:p-10 md:p-16 border border-white/10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 rounded-3xl">
             <div className="flex gap-6 items-center flex-col md:flex-row text-center md:text-left">
               <div className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                 <AnimatedIcon>

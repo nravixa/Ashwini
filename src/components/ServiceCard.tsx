@@ -66,11 +66,7 @@ function ServiceCard({
             priority={index < 2}
           />
           <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          {category && (
-            <div className="absolute top-4 left-4 z-10 bg-primary/90 text-white card-label px-4 py-1.5 rounded-full backdrop-blur-sm border border-white/20 shadow-xs">
-              {category}
-            </div>
-          )}
+
         </div>
 
         <div className="p-6 sm:p-8">

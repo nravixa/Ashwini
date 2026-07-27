@@ -185,10 +185,12 @@ export default function ServicesPage() {
     };
   }, []);
 
-  // Scroll-Spy observer to highlight active category in real time while scrolling
+  // Scroll-Spy observer to highlight active category in real time while scrolling (Desktop/Tablet only)
   useEffect(() => {
+    if (isMobile) return;
+
     const sectionKeys = Object.keys(servicesData) as SectionKey[];
-    const topMargin = navbarHeight + (isMobile ? 80 : 40);
+    const topMargin = navbarHeight + 40;
     const observerOptions = {
       root: null,
       rootMargin: `-${topMargin}px 0px -55% 0px`,
@@ -210,6 +212,63 @@ export default function ServicesPage() {
 
     return () => observer.disconnect();
   }, [navbarHeight, isMobile]);
+
+  // Mobile scroll-based automatic category transition observer
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const sectionKeys = Object.keys(servicesData) as SectionKey[];
+    const currentIndex = sectionKeys.indexOf(activeSection);
+
+    const observerOptions = {
+      root: null,
+      threshold: 0.05,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target.id === "mobile-next-trigger") {
+            if (currentIndex < sectionKeys.length - 1) {
+              const nextKey = sectionKeys[currentIndex + 1];
+              setActiveSection(nextKey);
+              // Instantly snap to the top of services container for continuity
+              const anchor = document.getElementById("services-content-anchor");
+              if (anchor) {
+                const offset = navbarHeight + 85;
+                window.scrollTo({
+                  top: anchor.getBoundingClientRect().top + window.scrollY - offset,
+                  behavior: "instant" as any,
+                });
+              }
+            }
+          } else if (entry.target.id === "mobile-prev-trigger") {
+            if (currentIndex > 0) {
+              const prevKey = sectionKeys[currentIndex - 1];
+              setActiveSection(prevKey);
+              // Instantly snap to the top of services container
+              const anchor = document.getElementById("services-content-anchor");
+              if (anchor) {
+                const offset = navbarHeight + 85;
+                window.scrollTo({
+                  top: anchor.getBoundingClientRect().top + window.scrollY - offset,
+                  behavior: "instant" as any,
+                });
+              }
+            }
+          }
+        }
+      });
+    }, observerOptions);
+
+    const nextTrigger = document.getElementById("mobile-next-trigger");
+    const prevTrigger = document.getElementById("mobile-prev-trigger");
+
+    if (nextTrigger) observer.observe(nextTrigger);
+    if (prevTrigger) observer.observe(prevTrigger);
+
+    return () => observer.disconnect();
+  }, [activeSection, isMobile, navbarHeight]);
 
   // Auto-scroll the active category pill into view on mobile/tablet
   useEffect(() => {
@@ -233,29 +292,42 @@ export default function ServicesPage() {
 
   const scrollToSection = (id: SectionKey) => {
     setActiveSection(id);
-    const element = document.getElementById(id);
-    if (element) {
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - (navbarHeight + (isMobile ? 75 : 40));
+    if (isMobile) {
+      setTimeout(() => {
+        const anchor = document.getElementById("services-content-anchor");
+        if (anchor) {
+          const offset = navbarHeight + 85;
+          window.scrollTo({
+            top: anchor.getBoundingClientRect().top + window.scrollY - offset,
+            behavior: "smooth",
+          });
+        }
+      }, 50);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - (navbarHeight + 40);
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     }
   };
 
   return (
-    <main className="pb-32 bg-background">
+    <main className="pb-16 md:pb-24 xl:pb-32 bg-background">
       <SEO 
         title="Our Services"
         description="Explore our bespoke luxury services including precision hair artistry, advanced dermal therapies, and exclusive bridal suites."
         canonical="/services"
       />
       {/* Hero Section with background image */}
-      <section id="hero-section" className="relative h-[65vh] md:h-[75vh] min-h-[450px] w-full flex items-center overflow-hidden bg-black mb-12 md:mb-16">
+      <section id="hero-section" className="relative h-[65vh] md:h-[75vh] min-h-[450px] w-full flex items-center overflow-hidden bg-black mb-8 md:mb-12 xl:mb-16">
         <div className="absolute inset-0 z-0 w-full h-full">
           <Image
             src={serviceHeroImg}
@@ -285,7 +357,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Main Container */}
-      <div className="px-6 md:px-16 max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-10 mt-10 lg:mt-12">
+      <div className="px-6 md:px-16 max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-10 mt-6 lg:mt-10">
         {/* Mobile/Tablet Category Chips (<1024px) - STICKY OVERLAY CONTAINER */}
         <div 
           className="w-full lg:hidden sticky z-30 bg-background/90 backdrop-blur-md py-3 -mx-6 px-6 border-b border-white/10 mb-6"
@@ -365,48 +437,103 @@ export default function ServicesPage() {
         </aside>
 
         {/* Main Services Content Area (Right Side - Mobile, Tablet, Desktop) */}
-        <div className="flex-1 min-w-0 space-y-16 sm:space-y-24 lg:space-y-32">
-          {(Object.keys(servicesData) as SectionKey[]).map((key) => {
-            const section = servicesData[key];
-            return (
-              <AnimatedSection
-                key={key}
-                id={key}
-                style={{ scrollMarginTop: `${navbarHeight + (isMobile ? 75 : 40)}px` }}
-              >
-                <div className="flex items-baseline gap-4 mb-8 sm:mb-10 border-b border-outline-variant/10 pb-3 sm:pb-4">
-                  <AnimatedHeading
-                    text={section.title}
-                    as="h2"
-                    className="font-display text-xl sm:text-2xl md:text-4xl font-medium text-white"
-                  />
-                  <span className="text-white/70 font-sans text-xs md:text-sm tracking-wider font-semibold">
-                    {section.indexLabel}
-                  </span>
-                </div>
+        <div id="services-content-anchor" className="flex-1 min-w-0 space-y-10 sm:space-y-16 lg:space-y-24">
+          {isMobile ? (
+            // Mobile view: Render ONLY the active category
+            (() => {
+              const section = servicesData[activeSection];
+              const sectionKeys = Object.keys(servicesData) as SectionKey[];
+              const currentIndex = sectionKeys.indexOf(activeSection);
+              return (
+                <div className="space-y-6">
+                  {/* Top trigger for scrolling up */}
+                  {currentIndex > 0 && (
+                    <div id="mobile-prev-trigger" className="h-2 w-full bg-transparent pointer-events-none" />
+                  )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10 content-auto contain-strict">
-                  {section.items.map((item, idx) => (
-                    <ServiceCard
-                      key={idx}
-                      title={item.title}
-                      description={item.description}
-                      imageUrl={item.imageUrl}
-                      duration={item.duration}
-                      price={item.price}
-                      category={section.title}
-                      index={idx}
-                    />
-                  ))}
+                  <AnimatedSection
+                    key={activeSection}
+                    id={activeSection}
+                    style={{ scrollMarginTop: `${navbarHeight + 75}px` }}
+                  >
+                    <div className="flex items-baseline gap-4 mb-6 sm:mb-8 border-b border-outline-variant/10 pb-2 sm:pb-3">
+                      <AnimatedHeading
+                        text={section.title}
+                        as="h2"
+                        className="font-display text-xl sm:text-2xl md:text-4xl font-medium text-white"
+                      />
+                      <span className="text-white/70 font-sans text-xs md:text-sm tracking-wider font-semibold">
+                        {section.indexLabel}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 content-auto contain-strict">
+                      {section.items.map((item, idx) => (
+                        <ServiceCard
+                          key={idx}
+                          title={item.title}
+                          description={item.description}
+                          imageUrl={item.imageUrl}
+                          duration={item.duration}
+                          price={item.price}
+                          category={section.title}
+                          index={idx}
+                        />
+                      ))}
+                    </div>
+                  </AnimatedSection>
+
+                  {/* Bottom trigger for scrolling down */}
+                  {currentIndex < sectionKeys.length - 1 && (
+                    <div id="mobile-next-trigger" className="h-6 w-full bg-transparent pointer-events-none" />
+                  )}
                 </div>
-              </AnimatedSection>
-            );
-          })}
+              );
+            })()
+          ) : (
+            // Desktop/Tablet view: Render all categories
+            (Object.keys(servicesData) as SectionKey[]).map((key) => {
+              const section = servicesData[key];
+              return (
+                <AnimatedSection
+                  key={key}
+                  id={key}
+                  style={{ scrollMarginTop: `${navbarHeight + 40}px` }}
+                >
+                  <div className="flex items-baseline gap-4 mb-6 sm:mb-8 border-b border-outline-variant/10 pb-2 sm:pb-3">
+                    <AnimatedHeading
+                      text={section.title}
+                      as="h2"
+                      className="font-display text-xl sm:text-2xl md:text-4xl font-medium text-white"
+                    />
+                    <span className="text-white/70 font-sans text-xs md:text-sm tracking-wider font-semibold">
+                      {section.indexLabel}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 content-auto contain-strict">
+                    {section.items.map((item, idx) => (
+                      <ServiceCard
+                        key={idx}
+                        title={item.title}
+                        description={item.description}
+                        imageUrl={item.imageUrl}
+                        duration={item.duration}
+                        price={item.price}
+                        category={section.title}
+                        index={idx}
+                      />
+                    ))}
+                  </div>
+                </AnimatedSection>
+              );
+            })
+          )}
         </div>
       </div>
 
       {/* Ready Booking Callout */}
-      <AnimatedSection className="relative py-24 sm:py-32 mt-24 sm:mt-32 overflow-hidden text-center text-white bg-black">
+      <AnimatedSection className="relative py-16 sm:py-24 md:py-32 mt-16 sm:mt-24 md:mt-32 overflow-hidden text-center text-white bg-black">
         <div className="absolute inset-0 z-0 w-full h-full">
           <Image
             src={transformationImg}

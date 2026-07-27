@@ -155,7 +155,7 @@ ${formData.name.trim() || "Customer"}`;
   };
 
   return (
-    <main className="pb-32 bg-background text-white relative overflow-hidden">
+    <main className="pb-16 md:pb-24 xl:pb-32 bg-background text-white relative overflow-hidden">
       <SEO 
         title="Contact Us"
         description="Get in touch with Ashwini Salon. Find our location, hours of operation, and contact details to schedule your next premium salon experience."
@@ -166,7 +166,7 @@ ${formData.name.trim() || "Customer"}`;
       <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] glow-orb-primary rounded-full pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="relative h-[55vh] min-h-[400px] w-full flex items-center overflow-hidden bg-black mb-24">
+      <section className="relative h-[55vh] min-h-[400px] w-full flex items-center overflow-hidden bg-black mb-12 md:mb-16 xl:mb-24">
         <div className="absolute inset-0 z-0 w-full h-full">
           <Image
             src={gallery4Img}
@@ -195,9 +195,9 @@ ${formData.name.trim() || "Customer"}`;
       </section>
 
       {/* Main Grid */}
-      <section className="px-6 md:px-16 max-w-[1440px] mx-auto mb-32 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start relative z-10">
+      <section className="px-6 md:px-16 max-w-[1440px] mx-auto mb-16 md:mb-24 xl:mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-start relative z-10">
         {/* Info Columns */}
-        <div className="lg:col-span-5 space-y-10">
+        <div className="lg:col-span-5 space-y-6 md:space-y-8 xl:space-y-10">
           <div className="space-y-4">
             <h2 className="font-display text-3xl md:text-4xl font-medium text-white">
               Studio Details

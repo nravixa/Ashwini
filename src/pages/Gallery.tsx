@@ -6,7 +6,7 @@ import ImageSlider from "@/components/ImageSlider";
 import AnimatedHeading from "@/components/animations/AnimatedHeading";
 import AnimatedSection from "@/components/animations/AnimatedSection";
 import SmokyButton from "@/components/ui/SmokyButton";
-import MouseParallax from "@/components/animations/MouseParallax";
+
 
 // Import local gallery images
 import Gallery1 from "@/components/images/Gallery_1.jpg?optimized";
@@ -101,21 +101,21 @@ const GalleryPage = React.memo(function GalleryPage() {
   ), [filteredItems, activeItem]);
 
   return (
-    <main className="pt-32 pb-32 overflow-x-hidden bg-background">
+    <main className="pt-20 sm:pt-28 md:pt-32 pb-16 md:pb-24 xl:pb-32 overflow-x-hidden bg-background">
       <SEO 
         title="Gallery"
         description="View our portfolio of aesthetic excellence. See the transformations and artistry created by the experts at Ashwini Salon."
         canonical="/gallery"
       />
       {/* Header Section */}
-      <AnimatedSection id="hero-section" className="px-6 md:px-16 max-w-[1440px] mx-auto mb-16 text-center">
+      <AnimatedSection id="hero-section" className="px-6 md:px-16 max-w-[1440px] mx-auto mb-10 md:mb-12 xl:mb-16 text-center">
         <span className="font-sans text-xs text-tertiary uppercase tracking-[0.3em] block mb-4 font-semibold">
           Aesthetic Excellence
         </span>
         <AnimatedHeading
           text="Curated Artistry"
           as="h1"
-          className="font-display text-4xl md:text-6xl mb-12 text-white"
+          className="font-display text-4xl md:text-6xl mb-8 md:mb-10 xl:mb-12 text-white"
         />
 
         {/* Filters */}
@@ -146,15 +146,15 @@ const GalleryPage = React.memo(function GalleryPage() {
 
       {/* Gallery Grid */}
       <section className="px-6 md:px-16 max-w-[1440px] mx-auto min-h-[500px]">
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
             {renderedItems}
         </div>
       </section>
 
       {/* Before & After Transformation Section */}
-      <AnimatedSection className="relative mt-32 bg-luxury-gradient py-24 border-y border-white/5">
+      <AnimatedSection className="relative mt-16 sm:mt-24 md:mt-32 bg-luxury-gradient py-16 md:py-24 border-y border-white/5">
         <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] glow-orb-secondary rounded-full -translate-y-1/2 pointer-events-none" />
-        <div className="relative z-10 px-6 md:px-16 max-w-[1440px] mx-auto text-center mb-16">
+        <div className="relative z-10 px-6 md:px-16 max-w-[1440px] mx-auto text-center mb-10 md:mb-12 xl:mb-16">
           <AnimatedHeading
             text="The Transformation"
             as="h2"
@@ -174,35 +174,71 @@ const GalleryPage = React.memo(function GalleryPage() {
         </div>
       </AnimatedSection>
 
-      {/* CTA section */}
-      <AnimatedSection className="mt-20 md:mt-32 px-6 md:px-16 max-w-[1440px] mx-auto">
-        <MouseParallax factor={5}>
-          <div className="relative h-[320px] sm:h-[350px] md:h-[400px] flex items-center justify-center text-center overflow-hidden rounded-3xl group border border-outline-variant/10 shadow-lg">
-            <Image
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCP-mGlnwoBWTrkcCTjRR8CrlNG93dEUIvNUc-QWT6G61qJWNkQ2Aqtoa3U4wN8q5Hj3k6ij2LKn7DkuaEsYBUdJB36jdzwACQIeH4WrgsOrX1Tz9hTUzp5u3g1cUYjddFFG1SN4FkPN-u0QSEG-kTelkUHoOvc-oAY6wdlM0PjeCGltwiljqIRkTNjljTy9LZh3J3vUNQiXjjYg8KuU5CVVNCZzua6PCEcW7KftaFAVLdOvgNDY70y_XLELpziXHeYXD7VI2-yywA"
-              alt="Out of focus background of luxury salon"
-              fill
-              priority
-              className="object-cover scale-110 group-hover:scale-100 transition-transform duration-[2000ms] object-center max-md:object-[50%_45%]"
-            />
-            <div className="absolute inset-0 bg-black/60" />
-            <div className="relative z-10 px-4 py-8 flex flex-col justify-center items-center w-full h-full">
-              <AnimatedHeading
-                text="Ready to write your own story?"
-                as="h2"
-                className="font-display text-[clamp(24px,4.5vw,42px)] text-white mb-6 leading-tight max-w-xl mx-auto"
-              />
-              <div className="flex justify-center w-full">
-                <Link to="/book" className="w-[85%] max-w-[280px] sm:w-auto">
-                  <SmokyButton variant="primary" as="div" className="w-full py-4.5 font-sans text-xs uppercase tracking-[0.2em] flex items-center justify-center">
-                    Book Your Session
-                  </SmokyButton>
-                </Link>
-              </div>
-            </div>
+      {/* CTA Hero Banner — full page width, image as background, text centred overlay */}
+      <AnimatedSection className="mt-12 md:mt-24 xl:mt-32 w-full">
+        <div className="relative w-full h-[480px] sm:h-[540px] md:h-[600px] lg:h-[640px] overflow-hidden group">
+
+          {/* ── Background image ────────────────────────────────────────── */}
+          <Image
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCP-mGlnwoBWTrkcCTjRR8CrlNG93dEUIvNUc-QWT6G61qJWNkQ2Aqtoa3U4wN8q5Hj3k6ij2LKn7DkuaEsYBUdJB36jdzwACQIeH4WrgsOrX1Tz9hTUzp5u3g1cUYjddFFG1SN4FkPN-u0QSEG-kTelkUHoOvc-oAY6wdlM0PjeCGltwiljqIRkTNjljTy9LZh3J3vUNQiXjjYg8KuU5CVVNCZzua6PCEcW7KftaFAVLdOvgNDY70y_XLELpziXHeYXD7VI2-yywA"
+            alt="Luxury salon atmosphere"
+            fill
+            priority
+            className="object-cover object-center scale-[1.06] group-hover:scale-100 transition-transform duration-[3000ms] ease-out"
+          />
+
+          {/* ── Layered gradient for rich, premium readability ───────────── */}
+          {/* Top vignette */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-transparent to-transparent" />
+          {/* Bottom rich dark */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+          {/* Centre radial scrim — keeps mid text crisp */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.25)_0%,_transparent_70%)]" />
+
+          {/* ── Decorative rose-gold glow behind text ────────────────────── */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/[0.07] rounded-full blur-3xl pointer-events-none" />
+
+          {/* ── Centred text content ─────────────────────────────────────── */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-5 sm:px-8">
+
+            {/* Decorative rule */}
+            <div className="w-8 h-[1px] bg-primary/70 mb-6" />
+
+            {/* Eyebrow */}
+            <span className="font-sans text-[10px] sm:text-xs text-primary uppercase tracking-[0.35em] block mb-5 font-semibold">
+              Your Story Begins Here
+            </span>
+
+            {/* Main heading */}
+            <h2 className="font-display text-[clamp(28px,5.5vw,60px)] text-white mb-5 leading-[1.1] tracking-tight max-w-3xl">
+              Ready to write your own story?
+            </h2>
+
+            {/* Supporting paragraph */}
+            <p className="font-sans text-[clamp(13px,1.5vw,16px)] text-white/70 mb-10 max-w-sm sm:max-w-md leading-relaxed">
+              Let our master artisans craft a look that is entirely, beautifully yours.
+            </p>
+
+            {/* CTA button */}
+            <Link to="/book" className="w-[80%] max-w-[240px] sm:w-auto">
+              <SmokyButton
+                variant="primary"
+                as="div"
+                className="w-full px-10 py-4 font-sans text-[10px] sm:text-xs uppercase tracking-[0.22em] flex items-center justify-center"
+              >
+                Book Your Session
+              </SmokyButton>
+            </Link>
+
+            {/* Decorative rule */}
+            <div className="w-8 h-[1px] bg-white/20 mt-10" />
+
           </div>
-        </MouseParallax>
+
+        </div>
       </AnimatedSection>
+
+
     </main>
   );
 });

@@ -34,7 +34,7 @@ export default function AboutPage() {
         canonical="/about"
       />
       {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[450px] w-full flex items-center overflow-hidden bg-black mb-24">
+      <section className="relative h-[60vh] min-h-[450px] w-full flex items-center overflow-hidden bg-black mb-16 md:mb-20 xl:mb-24">
         <div className="absolute inset-0 z-0 w-full h-full">
           <Image
             src={aboutImg}
@@ -63,8 +63,8 @@ export default function AboutPage() {
       </section>
 
       {/* Main Narrative Image Split */}
-      <AnimatedSection className="px-6 md:px-16 max-w-[1440px] mx-auto mb-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      <AnimatedSection className="px-6 md:px-16 max-w-[1440px] mx-auto mb-16 md:mb-24 xl:mb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           <div className="lg:col-span-6">
             <AnimatedImage className="h-[500px] relative rounded-[32px] overflow-hidden border border-white/10 shadow-2xl">
               <Image
@@ -103,10 +103,10 @@ export default function AboutPage() {
       </AnimatedSection>
 
       {/* Core Values */}
-      <AnimatedSection className="relative py-24 md:py-32 bg-luxury-gradient-alt border-t border-white/5 overflow-hidden">
+      <AnimatedSection className="relative py-16 md:py-24 xl:py-32 bg-luxury-gradient-alt border-t border-white/5 overflow-hidden">
         <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] glow-orb-secondary rounded-full -translate-y-1/2 pointer-events-none" />
         <div className="max-w-[1440px] mx-auto px-6 md:px-16 relative z-10">
-          <div className="text-center mb-20">
+          <div className="text-center mb-12 md:mb-16 xl:mb-20">
             <span className="font-sans text-xs text-rose-gold uppercase tracking-[0.25em] block mb-4 font-semibold">
               Our Creed
             </span>

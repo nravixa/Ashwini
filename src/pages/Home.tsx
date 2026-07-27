@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect, useRef } from "react";
-import { getWhatsAppUrl } from "../lib/whatsapp";
+import { WHATSAPP_LINK, PHONE_DISPLAY } from "../lib/whatsapp";
 import Image from "../components/Image";
 import { Link } from "react-router-dom";
-import { ArrowRight, Star, Mail, ArrowUpRight } from "lucide-react";
+import { ArrowRight, Star, Phone, ArrowUpRight } from "lucide-react";
 import AnimatedHeading from "@/components/animations/AnimatedHeading";
 import AnimatedSection from "@/components/animations/AnimatedSection";
 import AnimatedCard from "@/components/animations/AnimatedCard";
@@ -10,7 +10,7 @@ import AnimatedButton from "@/components/animations/AnimatedButton";
 import SmokyButton from "@/components/ui/SmokyButton";
 import AnimatedImage from "@/components/animations/AnimatedImage";
 import AnimatedIcon from "@/components/animations/AnimatedIcon";
-
+import WhatsAppIcon from "../components/WhatsAppIcon";
 import FloatingElement from "@/components/animations/FloatingElement";
 import HeroGSAP from "@/components/animations/HeroGSAP";
 import SEO from "../components/SEO";
@@ -104,9 +104,7 @@ const HomePage = React.memo(function HomePage() {
   const [reviewForm, setReviewForm] = useState({ author: "", stars: 5, quote: "" });
   const [reviewSuccess, setReviewSuccess] = useState(false);
   
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [subscribeSuccess, setSubscribeSuccess] = useState(false);
+  // Email subscription state removed — replaced by direct WhatsApp CTA
   const [activePreviewItem, setActivePreviewItem] = useState<string | null>(null);
 
   const trackRef = useRef<HTMLDivElement>(null);
@@ -159,41 +157,7 @@ const HomePage = React.memo(function HomePage() {
     setTimeout(() => setReviewSuccess(false), 3000);
   };
 
-  const handleSubscribeSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setEmailError("");
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) {
-      setEmailError("Email address is required.");
-      return;
-    }
-    if (!emailRegex.test(email)) {
-      setEmailError("Please enter a valid email address.");
-      return;
-    }
-
-    const message = `Hello Ashwini Beauty & Salon Team,
-
-I hope you're doing well.
-
-I would like to subscribe to your salon updates. Please find my details below:
-
-📧 Email: ${email.trim()}
-
-I would appreciate it if you could add me to your updates and exclusive offers.
-
-Thank you for your time.
-
-Kind Regards,
-Subscriber`;
-    const url = getWhatsAppUrl(message);
-    window.open(url, '_blank');
-    
-    setSubscribeSuccess(true);
-    setEmail("");
-    setTimeout(() => setSubscribeSuccess(false), 4000);
-  };
+  // handleSubscribeSubmit removed — replaced by direct WhatsApp link
 
   const renderedFeaturedServices = useMemo(() => (
     featuredServices.map((service, index) => (
@@ -350,8 +314,8 @@ Subscriber`;
 
 
       {/* Signature Services */}
-      <AnimatedSection className="py-32 max-w-[1440px] mx-auto px-6 md:px-16">
-        <div className="text-center mb-24">
+      <AnimatedSection className="py-16 md:py-24 xl:py-32 max-w-[1440px] mx-auto px-6 md:px-16">
+        <div className="text-center mb-12 md:mb-16 xl:mb-24">
           <span className="font-sans text-xs text-tertiary uppercase tracking-widest block mb-4 font-semibold">
             Curated Experiences
           </span>
@@ -367,11 +331,11 @@ Subscriber`;
       </AnimatedSection>
 
       {/* Visual Masterpieces / Gallery Preview */}
-      <AnimatedSection className="relative py-32 bg-luxury-gradient-alt text-white overflow-hidden">
+      <AnimatedSection className="relative py-16 md:py-24 xl:py-32 bg-luxury-gradient-alt text-white overflow-hidden">
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] glow-orb-secondary rounded-full pointer-events-none" />
         <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-16">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
-            <div className="max-w-xl">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12 md:mb-16 xl:mb-20">
+            <div>
               <span className="font-sans text-xs text-white/60 uppercase tracking-widest block mb-4 font-semibold">
                 The Aesthetic
               </span>
@@ -380,8 +344,9 @@ Subscriber`;
                 className="font-display text-3xl md:text-5xl font-medium text-white"
               />
             </div>
-            <Link to="/gallery"
-              className="font-sans text-xs uppercase tracking-widest border-b border-white/30 pb-2 hover:border-white transition-all flex items-center gap-1 group"
+            <Link
+              to="/gallery"
+              className="font-sans text-xs uppercase tracking-widest border-b border-white/30 pb-2 hover:border-white transition-all flex items-center gap-1 group self-start sm:self-auto shrink-0"
             >
               View Full Gallery
               <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -390,7 +355,7 @@ Subscriber`;
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
             {/* Item 1 */}
-            <AnimatedCard index={0} className="relative group overflow-hidden rounded-lg md:col-span-1 md:mt-10 cursor-pointer" onClick={() => setActivePreviewItem(activePreviewItem === galleryPreview[0].title ? null : galleryPreview[0].title)}>
+            <AnimatedCard index={0} className="relative group overflow-hidden rounded-lg md:col-span-1 md:mt-6 lg:mt-8 xl:mt-10 cursor-pointer" onClick={() => setActivePreviewItem(activePreviewItem === galleryPreview[0].title ? null : galleryPreview[0].title)}>
               <AnimatedImage className="h-[400px] w-full bg-neutral-900 overflow-hidden">
                 <Image
                   src={galleryPreview[0].imageUrl}
@@ -446,7 +411,7 @@ Subscriber`;
             </AnimatedCard>
 
             {/* Item 3 */}
-            <AnimatedCard index={2} className="relative group overflow-hidden rounded-lg md:col-span-1 md:mt-10 cursor-pointer" onClick={() => setActivePreviewItem(activePreviewItem === galleryPreview[2].title ? null : galleryPreview[2].title)}>
+            <AnimatedCard index={2} className="relative group overflow-hidden rounded-lg md:col-span-1 md:mt-6 lg:mt-8 xl:mt-10 cursor-pointer" onClick={() => setActivePreviewItem(activePreviewItem === galleryPreview[2].title ? null : galleryPreview[2].title)}>
               <AnimatedImage className="h-[400px] w-full bg-neutral-900 overflow-hidden">
                 <Image
                   src={galleryPreview[2].imageUrl}
@@ -477,9 +442,9 @@ Subscriber`;
       </AnimatedSection>
 
       {/* Testimonials Section */}
-      <AnimatedSection className="py-32 overflow-hidden bg-background border-t border-white/5">
+      <AnimatedSection className="py-16 md:py-24 xl:py-32 overflow-hidden bg-background border-t border-white/5">
         <div className="max-w-[1440px] mx-auto px-6 md:px-16">
-          <div className="text-center mb-24">
+          <div className="text-center mb-12 md:mb-16 xl:mb-24">
             <span className="font-sans text-xs text-tertiary uppercase tracking-widest block mb-4 font-semibold">
               Voices of Ashwini
             </span>
@@ -516,7 +481,7 @@ Subscriber`;
           </div>
 
           {/* Add Review Form */}
-          <div className="max-w-2xl mx-auto glass-card p-8 md:p-12 mt-12 text-left">
+          <div className="max-w-2xl mx-auto glass-card p-6 sm:p-10 md:p-12 mt-8 md:mt-10 xl:mt-12 text-left">
             <h3 className="font-display text-2xl mb-6 text-white text-center">Share Your Experience</h3>
             {reviewSuccess ? (
               <div className="bg-primary/20 border border-primary/50 text-white p-4 rounded-xl text-center font-sans text-sm transition-all">
@@ -576,60 +541,60 @@ Subscriber`;
         </div>
       </AnimatedSection>
 
-      {/* Newsletter / Circle Section */}
-      <AnimatedSection className="relative py-32 px-6 md:px-16 max-w-[1440px] mx-auto">
+      {/* WhatsApp Circle Section */}
+      <AnimatedSection className="relative py-16 md:py-24 xl:py-32 px-6 md:px-16 max-w-[1440px] mx-auto">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] glow-orb-primary rounded-full pointer-events-none" />
         <FloatingElement duration={7} yOffset={8}>
-          <div
-            className="max-w-4xl mx-auto glass-card p-8 md:p-20 text-center"
-          >
+          <div className="max-w-3xl mx-auto glass-card p-6 sm:p-10 md:p-16 text-center">
+
+            {/* Label */}
             <span className="font-sans text-xs text-tertiary uppercase tracking-widest block mb-4 font-semibold">
-              Stay Inspired
+              Stay Connected
             </span>
+
+            {/* Heading */}
             <AnimatedHeading
               text="Join the Ashwini Circle"
               className="font-display text-4xl md:text-5xl mb-6 text-3d-acrylic"
             />
-            <p className="font-sans text-base md:text-lg text-white/70 mb-12 max-w-xl mx-auto leading-relaxed">
-              Subscribe to receive exclusive salon offers, seasonal styling guides, and VIP invitations to private events.
+
+            {/* Subtitle */}
+            <p className="font-sans text-base md:text-lg text-white/70 mb-10 max-w-lg mx-auto leading-relaxed">
+              Get exclusive salon offers, seasonal styling tips, and VIP event invitations — straight to your WhatsApp.
             </p>
-            <form
-              className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto w-full relative"
-              onSubmit={handleSubscribeSubmit}
-            >
-              <div className="flex-grow relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setEmailError("");
-                  }}
-                  placeholder="Your Email Address"
-                  className={`w-full premium-glass border ${emailError ? 'border-primary/80 shadow-[0_0_15px_rgba(240,140,174,0.4)]' : 'border-white/20 focus:border-primary focus:shadow-[0_0_25px_rgba(240,140,174,0.6)]'} bg-transparent text-white placeholder-white/60 rounded-full px-8 py-4 font-sans text-sm outline-none transition-all duration-500 z-10 relative`}
-                />
-                {emailError && (
-                  <div className="absolute -bottom-6 left-6 text-[10px] text-primary uppercase tracking-wider font-bold">
-                    {emailError}
-                  </div>
-                )}
-                {subscribeSuccess && (
-                  <div className="absolute -bottom-6 left-6 text-[10px] text-green-400 uppercase tracking-wider font-bold">
-                    Redirecting to WhatsApp...
-                  </div>
-                )}
+
+            {/* Contact number display */}
+            <div className="inline-flex items-center gap-3 premium-glass border border-white/15 rounded-2xl px-6 py-4 mb-8 group hover:border-primary/40 hover:shadow-[0_0_20px_rgba(240,140,174,0.15)] transition-all duration-400">
+              <span className="w-8 h-8 rounded-xl bg-[#25D366]/15 border border-[#25D366]/25 flex items-center justify-center shrink-0">
+                <Phone className="w-3.5 h-3.5 text-[#25D366]" />
+              </span>
+              <div className="text-left">
+                <p className="font-sans text-[10px] uppercase tracking-widest text-white/50 mb-0.5">WhatsApp / Call</p>
+                <p className="font-sans text-base font-semibold text-white tracking-wide">{PHONE_DISPLAY}</p>
               </div>
-              <SmokyButton
-                variant="primary"
-                type="submit"
-                className="px-10 py-4 font-sans text-xs uppercase tracking-widest flex items-center justify-center gap-2 shrink-0"
+            </div>
+
+            {/* WhatsApp CTA */}
+            <div className="flex justify-center">
+              <a
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex"
               >
-                <AnimatedIcon>
-                  <Mail className="w-4 h-4" />
-                </AnimatedIcon>
-                Subscribe
-              </SmokyButton>
-            </form>
+                <SmokyButton
+                  variant="primary"
+                  as="div"
+                  className="px-10 py-4 font-sans text-xs uppercase tracking-widest flex items-center gap-3"
+                >
+                  <AnimatedIcon>
+                    <WhatsAppIcon className="w-4 h-4 text-white" />
+                  </AnimatedIcon>
+                  Chat on WhatsApp
+                </SmokyButton>
+              </a>
+            </div>
+
           </div>
         </FloatingElement>
       </AnimatedSection>

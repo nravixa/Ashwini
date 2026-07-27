@@ -204,8 +204,8 @@ ${formData.name.trim() || "Customer"}`;
         canonical="/book"
       />
       {/* Booking Form Section */}
-      <AnimatedSection className="w-full max-w-[650px] space-y-10">
-        <div className="glass-card p-8 md:p-12 border border-white/10 shadow-2xl rounded-3xl bg-white/[0.02] backdrop-blur-xl">
+      <AnimatedSection className="w-full max-w-[650px] space-y-6 sm:space-y-8 xl:space-y-10">
+        <div className="glass-card p-6 sm:p-10 md:p-12 border border-white/10 shadow-2xl rounded-3xl bg-white/[0.02] backdrop-blur-xl">
           <div className="mb-8">
             <h3 className="font-display text-2xl md:text-3xl font-medium text-white mb-2">
               Reserve your Session

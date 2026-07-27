@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Image from "../components/Image";
 import { ArrowLeftRight } from "lucide-react";
-import gsap from "gsap";
+import { gsap } from "gsap";
 
 interface ImageSliderProps {
   beforeImage: string | any;
