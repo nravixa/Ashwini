@@ -4,6 +4,7 @@ import CategoryTabs from "@/components/CategoryTabs";
 import SEO from "../components/SEO";
 import Image from "../components/Image";
 import ServiceCard from "@/components/ServiceCard";
+import ImageLightbox from "@/components/ImageLightbox";
 import { Link } from "react-router-dom";
 import AnimatedHeading from "@/components/animations/AnimatedHeading";
 import AnimatedSection from "@/components/animations/AnimatedSection";
@@ -178,6 +179,7 @@ export default function ServicesPage() {
   const [activeCategory, setActiveCategory] = useState("All Services");
   const [navbarHeight, setNavbarHeight] = useState(80);
   const [isMobile, setIsMobile] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Synchronize default category active state between mobile ("All Services") and desktop/tablet ("Hair Artistry")
   useEffect(() => {
@@ -304,6 +306,36 @@ export default function ServicesPage() {
     const category = sectionKeyToCategoryMap[key];
     handleCategoryChange(category);
   };
+
+  const visibleImages = useMemo(() => {
+    const list: { url: any; title: string }[] = [];
+    (Object.keys(servicesData) as SectionKey[]).forEach((key) => {
+      const isSelected = !isMobile || activeCategory === "All Services" || activeCategory === sectionKeyToCategoryMap[key];
+      if (isSelected) {
+        servicesData[key].items.forEach((item) => {
+          list.push({
+            url: item.imageUrl,
+            title: item.title,
+          });
+        });
+      }
+    });
+    return list;
+  }, [activeCategory, isMobile]);
+
+  const handlePrevImage = useCallback(() => {
+    setLightboxIndex((prev) => {
+      if (prev === null) return null;
+      return prev === 0 ? visibleImages.length - 1 : prev - 1;
+    });
+  }, [visibleImages.length]);
+
+  const handleNextImage = useCallback(() => {
+    setLightboxIndex((prev) => {
+      if (prev === null) return null;
+      return prev === visibleImages.length - 1 ? 0 : prev + 1;
+    });
+  }, [visibleImages.length]);
 
   return (
     <main className="pb-16 md:pb-24 xl:pb-32 bg-background">
@@ -456,18 +488,28 @@ export default function ServicesPage() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 content-auto contain-strict">
-                  {section.items.map((item, idx) => (
-                    <ServiceCard
-                      key={idx}
-                      title={item.title}
-                      description={item.description}
-                      imageUrl={item.imageUrl}
-                      duration={item.duration}
-                      price={item.price}
-                      category={section.title}
-                      index={idx}
-                    />
-                  ))}
+                  {section.items.map((item, idx) => {
+                    const globalIndex = visibleImages.findIndex(
+                      (img) => img.url === item.imageUrl && img.title === item.title
+                    );
+                    return (
+                      <ServiceCard
+                        key={idx}
+                        title={item.title}
+                        description={item.description}
+                        imageUrl={item.imageUrl}
+                        duration={item.duration}
+                        price={item.price}
+                        category={section.title}
+                        index={idx}
+                        onImageClick={() => {
+                          if (globalIndex !== -1) {
+                            setLightboxIndex(globalIndex);
+                          }
+                        }}
+                      />
+                    );
+                  })}
                 </div>
               </AnimatedSection>
             );
@@ -515,6 +557,15 @@ export default function ServicesPage() {
           </div>
         </div>
       </AnimatedSection>
+
+      <ImageLightbox
+        isOpen={lightboxIndex !== null}
+        images={visibleImages}
+        currentIndex={lightboxIndex ?? 0}
+        onClose={() => setLightboxIndex(null)}
+        onPrev={handlePrevImage}
+        onNext={handleNextImage}
+      />
     </main>
   );
 }

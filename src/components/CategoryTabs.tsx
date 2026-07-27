@@ -21,7 +21,7 @@ export default function CategoryTabs({
           <button
             key={category}
             onClick={() => onCategoryChange(category)}
-            className={`relative px-6 py-2 font-sans text-xs md:text-sm uppercase tracking-widest transition-colors font-medium cursor-pointer ${
+            className={`relative px-3 sm:px-6 py-2 font-sans text-xs md:text-sm uppercase tracking-widest transition-colors font-medium cursor-pointer ${
               active
                 ? "text-tertiary font-bold"
                 : "text-white/70 hover:text-white"

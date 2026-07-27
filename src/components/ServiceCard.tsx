@@ -15,6 +15,7 @@ interface ServiceCardProps {
   price?: string;
   category?: string;
   index: number;
+  onImageClick?: () => void;
 }
 
 function ServiceCard({
@@ -26,6 +27,7 @@ function ServiceCard({
   price,
   category,
   index,
+  onImageClick,
 }: ServiceCardProps) {
   const { items, addToCart } = useCart();
   const serviceId = id || title.toLowerCase().replace(/\s+/g, "-");
@@ -56,7 +58,10 @@ function ServiceCard({
       <div className="absolute inset-0 bg-gradient-to-b from-rose-gold/10 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
       <div>
-        <div className="relative h-72 sm:h-80 w-full overflow-hidden bg-surface-dim">
+        <div 
+          onClick={onImageClick}
+          className="relative h-72 sm:h-80 w-full overflow-hidden bg-surface-dim cursor-pointer"
+        >
           <Image
             src={imageUrl}
             alt={title}
@@ -65,8 +70,14 @@ function ServiceCard({
             className="object-cover transition-transform duration-700 group-hover:scale-105"
             priority={index < 2}
           />
-          <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
+          <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+            {/* Zoom icon hint */}
+            <span className="text-white bg-black/40 p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+              </svg>
+            </span>
+          </div>
         </div>
 
         <div className="p-6 sm:p-8">
