@@ -216,13 +216,13 @@ const Navbar = React.memo(function Navbar() {
             }`}
         >
           {/* Header Row */}
-          <div className="flex items-center justify-between pb-6 border-b border-white/10 shrink-0">
-            <span className="font-display text-sm sm:text-base font-extrabold tracking-[0.12em] sm:tracking-[0.15em] text-white uppercase">
+          <div className="relative w-full flex items-center justify-center pb-6 border-b border-white/10 shrink-0">
+            <span className="font-display text-sm sm:text-base font-extrabold tracking-[0.12em] sm:tracking-[0.15em] text-white uppercase text-center">
               ASHWINI SALON
             </span>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white w-11 h-11 flex items-center justify-center rounded-full hover:bg-white/5 active:bg-white/10 transition-colors focus:outline-none"
+              className="absolute right-0 top-1/2 -translate-y-[calc(50%+3px)] text-white w-11 h-11 flex items-center justify-center rounded-full hover:bg-white/5 active:bg-white/10 transition-colors focus:outline-none"
               aria-label="Close Menu"
             >
               <X className="w-6 h-6" />

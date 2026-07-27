@@ -215,69 +215,6 @@ export default function ServicesPage() {
     return () => observer.disconnect();
   }, [navbarHeight, isMobile]);
 
-  const lastTransitionTime = useRef(0);
-
-  // Mobile scroll-based automatic category transition listener
-  useEffect(() => {
-    if (!isMobile) return;
-
-    const handleScroll = () => {
-      if (isTransitioning) return;
-      if (Date.now() - lastTransitionTime.current < 1000) return;
-
-      const anchor = document.getElementById("services-content-anchor");
-      if (!anchor) return;
-
-      const rect = anchor.getBoundingClientRect();
-      const sectionKeys = Object.keys(servicesData) as SectionKey[];
-      const currentIndex = sectionKeys.indexOf(activeSection);
-
-      // Check scroll down (next category)
-      const scrolledToBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 15;
-      if (scrolledToBottom && currentIndex < sectionKeys.length - 1) {
-        const nextKey = sectionKeys[currentIndex + 1];
-        lastTransitionTime.current = Date.now();
-        setIsTransitioning(true);
-        setTimeout(() => {
-          setActiveSection(nextKey);
-          // Snap scroll to top of services content anchor
-          const updatedAnchor = document.getElementById("services-content-anchor");
-          if (updatedAnchor) {
-            const offset = navbarHeight + 85;
-            window.scrollTo({
-              top: updatedAnchor.getBoundingClientRect().top + window.scrollY - offset,
-              behavior: "instant" as any,
-            });
-          }
-          setIsTransitioning(false);
-        }, 250);
-        return;
-      }
-
-      // Check scroll up (previous category)
-      const scrolledToTop = rect.top > navbarHeight + 120;
-      if (scrolledToTop && currentIndex > 0) {
-        const prevKey = sectionKeys[currentIndex - 1];
-        lastTransitionTime.current = Date.now();
-        setIsTransitioning(true);
-        setTimeout(() => {
-          setActiveSection(prevKey);
-          // Position user near the bottom of the previous section's cards
-          setTimeout(() => {
-            window.scrollTo({
-              top: document.documentElement.scrollHeight - window.innerHeight - 30,
-              behavior: "instant" as any,
-            });
-          }, 50);
-          setIsTransitioning(false);
-        }, 250);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeSection, isMobile, navbarHeight, isTransitioning]);
-
   // Auto-scroll the active category pill into view on tablet viewports
   useEffect(() => {
     if (isMobile) return;
@@ -302,9 +239,9 @@ export default function ServicesPage() {
   const scrollToSection = (id: SectionKey) => {
     if (isMobile) {
       if (id === activeSection) return;
-      lastTransitionTime.current = Date.now();
-      setActiveSection(id);
+      setIsTransitioning(true);
       setTimeout(() => {
+        setActiveSection(id);
         const anchor = document.getElementById("services-content-anchor");
         if (anchor) {
           const offset = navbarHeight + 85;
@@ -313,7 +250,8 @@ export default function ServicesPage() {
             behavior: "smooth",
           });
         }
-      }, 50);
+        setIsTransitioning(false);
+      }, 250);
     } else {
       setActiveSection(id);
       const element = document.getElementById(id);
