@@ -31,7 +31,28 @@ const MapPopupComponent = React.lazy(() => import("@/registry/map").then(m => ({
 
 export default function ContactPage() {
   const [mapInView, setMapInView] = useState(false);
+  const [showRecenter, setShowRecenter] = useState(false);
   const mapRef = React.useRef<HTMLDivElement>(null);
+  const mapInstanceRef = React.useRef<any>(null);
+
+  const handleViewportChange = React.useCallback((viewport: any) => {
+    if (viewport && viewport.center) {
+      const latDiff = Math.abs(viewport.center[1] - 18.4978166);
+      const lngDiff = Math.abs(viewport.center[0] - 73.7897774);
+      setShowRecenter(latDiff > 0.0001 || lngDiff > 0.0001);
+    }
+  }, []);
+
+  const handleRecenter = React.useCallback(() => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.flyTo({
+        center: [73.7897774, 18.4978166],
+        zoom: 15,
+        essential: true,
+        duration: 1200,
+      });
+    }
+  }, []);
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
@@ -457,81 +478,95 @@ ${formData.name.trim() || "Customer"}`;
             className="relative block w-full h-[350px] sm:h-[450px] md:h-[500px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#0a0814] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(240,140,174,0.15)]"
           >
             {mapInView ? (
-              <React.Suspense
-                fallback={
-                  <div className="w-full h-full flex items-center justify-center text-white/50 font-sans text-xs">
-                    <Loader2 className="w-5 h-5 animate-spin mr-2 text-rose-gold" />
-                    <span>Loading Premium Map...</span>
-                  </div>
-                }
-              >
-                <MapComponent
-                  center={[73.7897774, 18.4978166]}
-                  zoom={15}
-                  theme="dark"
-                  dragRotate={false}
-                  pitchWithRotate={false}
-                  maxPitch={0}
-                  className="w-full h-full"
-                >
-                  <MapMarkerComponent
-                    longitude={73.7897774}
-                    latitude={18.4978166}
-                    onClick={() => window.open("https://maps.app.goo.gl/E9bVYJWumFyUvrwW7", "_blank", "noopener,noreferrer")}
-                  >
-                    <MarkerContentComponent>
-                      <div className="relative group flex items-center justify-center cursor-pointer">
-                        {/* Outer glowing ripple ring */}
-                        <span className="absolute inline-flex h-8 w-8 rounded-full bg-[#F08CAE]/30 animate-ping opacity-75"></span>
-                        
-                        {/* Inner glowing pulse ring */}
-                        <span className="absolute inline-flex h-6 w-6 rounded-full bg-[#F08CAE]/20 animate-pulse"></span>
-                        
-                        {/* Solid center dot */}
-                        <div className="relative h-4.5 w-4.5 rounded-full border-2 border-white bg-[#F08CAE] shadow-lg transition-transform duration-300 group-hover:scale-125 flex items-center justify-center">
-                          <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-                        </div>
-                      </div>
-                    </MarkerContentComponent>
-                  </MapMarkerComponent>
-                  
-                  <MapPopupComponent
-                    longitude={73.7897774}
-                    latitude={18.4978166}
-                    closeButton={false}
-                    offset={25}
-                    className="glass-card border border-white/10 p-5 rounded-2xl shadow-xl bg-background/80 backdrop-blur-md max-w-[280px]"
-                  >
-                    <div className="space-y-3 text-white">
-                      <div className="border-b border-white/10 pb-2">
-                        <h4 className="font-display text-lg font-bold tracking-wide text-rose-gold">Ashwini Salon</h4>
-                        <p className="font-sans text-[10px] text-white/50 uppercase tracking-wider font-semibold">Premium Beauty & Salon</p>
-                      </div>
-                      
-                      <div className="space-y-1.5 font-sans text-xs">
-                        <p className="flex items-start gap-1.5 text-white/90">
-                          <span className="shrink-0 mt-0.5">📍</span>
-                          <span>Kothrud, Pune</span>
-                        </p>
-                        <p className="flex items-center gap-1.5 text-white/70">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#1ebd59] animate-pulse mr-1" />
-                          <span>Open Daily: 10:00 AM – 8:00 PM</span>
-                        </p>
-                      </div>
-
-                      <a
-                        href="https://maps.app.goo.gl/E9bVYJWumFyUvrwW7"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 font-sans text-xs font-bold uppercase tracking-widest text-rose-gold hover:text-white transition-colors mt-2"
-                      >
-                        <span>Get Directions</span>
-                        <span>→</span>
-                      </a>
+              <>
+                <React.Suspense
+                  fallback={
+                    <div className="w-full h-full flex items-center justify-center text-white/50 font-sans text-xs">
+                      <Loader2 className="w-5 h-5 animate-spin mr-2 text-rose-gold" />
+                      <span>Loading Premium Map...</span>
                     </div>
-                  </MapPopupComponent>
-                </MapComponent>
-              </React.Suspense>
+                  }
+                >
+                  <MapComponent
+                    ref={mapInstanceRef}
+                    center={[73.7897774, 18.4978166]}
+                    zoom={15}
+                    theme="dark"
+                    dragRotate={false}
+                    pitchWithRotate={false}
+                    maxPitch={0}
+                    className="w-full h-full"
+                    onViewportChange={handleViewportChange}
+                  >
+                    <MapMarkerComponent
+                      longitude={73.7897774}
+                      latitude={18.4978166}
+                      onClick={() => window.open("https://maps.app.goo.gl/E9bVYJWumFyUvrwW7", "_blank", "noopener,noreferrer")}
+                    >
+                      <MarkerContentComponent>
+                        <div className="relative group flex items-center justify-center cursor-pointer">
+                          {/* Outer glowing ripple ring */}
+                          <span className="absolute inline-flex h-8 w-8 rounded-full bg-[#F08CAE]/30 animate-ping opacity-75"></span>
+                          
+                          {/* Inner glowing pulse ring */}
+                          <span className="absolute inline-flex h-6 w-6 rounded-full bg-[#F08CAE]/20 animate-pulse"></span>
+                          
+                          {/* Solid center dot */}
+                          <div className="relative h-4.5 w-4.5 rounded-full border-2 border-white bg-[#F08CAE] shadow-lg transition-transform duration-300 group-hover:scale-125 flex items-center justify-center">
+                            <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                          </div>
+                        </div>
+                      </MarkerContentComponent>
+                    </MapMarkerComponent>
+                    
+                    <MapPopupComponent
+                      longitude={73.7897774}
+                      latitude={18.4978166}
+                      closeButton={false}
+                      offset={25}
+                      className="glass-card border border-white/10 p-5 rounded-2xl shadow-xl bg-background/80 backdrop-blur-md max-w-[280px]"
+                    >
+                      <div className="space-y-3 text-white">
+                        <div className="border-b border-white/10 pb-2">
+                          <h4 className="font-display text-lg font-bold tracking-wide text-rose-gold">Ashwini Salon</h4>
+                          <p className="font-sans text-[10px] text-white/50 uppercase tracking-wider font-semibold">Premium Beauty & Salon</p>
+                        </div>
+                        
+                        <div className="space-y-1.5 font-sans text-xs">
+                          <p className="flex items-start gap-1.5 text-white/90">
+                            <span className="shrink-0 mt-0.5">📍</span>
+                            <span>Kothrud, Pune</span>
+                          </p>
+                          <p className="flex items-center gap-1.5 text-white/70">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#1ebd59] animate-pulse mr-1" />
+                            <span>Open Daily: 10:00 AM – 8:00 PM</span>
+                          </p>
+                        </div>
+
+                        <a
+                          href="https://maps.app.goo.gl/E9bVYJWumFyUvrwW7"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 font-sans text-xs font-bold uppercase tracking-widest text-rose-gold hover:text-white transition-colors mt-2"
+                        >
+                          <span>Get Directions</span>
+                          <span>→</span>
+                        </a>
+                      </div>
+                    </MapPopupComponent>
+                  </MapComponent>
+                </React.Suspense>
+
+                {showRecenter && (
+                  <button
+                    onClick={handleRecenter}
+                    className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#F08CAE]/30 bg-[#1D1A31]/95 backdrop-blur-md text-white font-sans text-xs uppercase tracking-widest hover:border-[#F08CAE]/60 hover:bg-[#F08CAE]/10 active:scale-95 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.5)] cursor-pointer"
+                  >
+                    <MapPin className="w-3.5 h-3.5 text-rose-gold animate-bounce" />
+                    <span>Return to Ashwini Salon</span>
+                  </button>
+                )}
+              </>
             ) : (
               <div className="w-full h-full flex items-center justify-center text-white/50 font-sans text-xs">
                 <Loader2 className="w-5 h-5 animate-spin mr-2 text-rose-gold" />
