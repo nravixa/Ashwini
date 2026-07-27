@@ -222,7 +222,7 @@ const Navbar = React.memo(function Navbar() {
             </span>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white p-2 focus:outline-none"
+              className="text-white w-11 h-11 flex items-center justify-center rounded-full hover:bg-white/5 active:bg-white/10 transition-colors focus:outline-none"
               aria-label="Close Menu"
             >
               <X className="w-6 h-6" />
