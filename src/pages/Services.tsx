@@ -214,73 +214,72 @@ export default function ServicesPage() {
     return () => observer.disconnect();
   }, [navbarHeight, isMobile]);
 
-  // Mobile scroll-based automatic category transition observer
+  const lastTransitionTime = useRef(0);
+
+  // Mobile scroll-based automatic category transition listener
   useEffect(() => {
     if (!isMobile) return;
 
-    const sectionKeys = Object.keys(servicesData) as SectionKey[];
-    const currentIndex = sectionKeys.indexOf(activeSection);
+    const handleScroll = () => {
+      if (isTransitioning) return;
+      if (Date.now() - lastTransitionTime.current < 1000) return;
 
-    const observerOptions = {
-      root: null,
-      threshold: 0.05,
+      const anchor = document.getElementById("services-content-anchor");
+      if (!anchor) return;
+
+      const rect = anchor.getBoundingClientRect();
+      const sectionKeys = Object.keys(servicesData) as SectionKey[];
+      const currentIndex = sectionKeys.indexOf(activeSection);
+
+      // Check scroll down (next category)
+      const scrolledToBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 15;
+      if (scrolledToBottom && currentIndex < sectionKeys.length - 1) {
+        const nextKey = sectionKeys[currentIndex + 1];
+        lastTransitionTime.current = Date.now();
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setActiveSection(nextKey);
+          // Snap scroll to top of services content anchor
+          const updatedAnchor = document.getElementById("services-content-anchor");
+          if (updatedAnchor) {
+            const offset = navbarHeight + 85;
+            window.scrollTo({
+              top: updatedAnchor.getBoundingClientRect().top + window.scrollY - offset,
+              behavior: "instant" as any,
+            });
+          }
+          setIsTransitioning(false);
+        }, 250);
+        return;
+      }
+
+      // Check scroll up (previous category)
+      const scrolledToTop = rect.top > navbarHeight + 120;
+      if (scrolledToTop && currentIndex > 0) {
+        const prevKey = sectionKeys[currentIndex - 1];
+        lastTransitionTime.current = Date.now();
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setActiveSection(prevKey);
+          // Position user near the bottom of the previous section's cards
+          setTimeout(() => {
+            window.scrollTo({
+              top: document.documentElement.scrollHeight - window.innerHeight - 30,
+              behavior: "instant" as any,
+            });
+          }, 50);
+          setIsTransitioning(false);
+        }, 250);
+      }
     };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !isTransitioning) {
-          if (entry.target.id === "mobile-next-trigger") {
-            if (currentIndex < sectionKeys.length - 1) {
-              const nextKey = sectionKeys[currentIndex + 1];
-              setIsTransitioning(true);
-              setTimeout(() => {
-                setActiveSection(nextKey);
-                // Instantly snap to the top of services container for continuity
-                const anchor = document.getElementById("services-content-anchor");
-                if (anchor) {
-                  const offset = navbarHeight + 85;
-                  window.scrollTo({
-                    top: anchor.getBoundingClientRect().top + window.scrollY - offset,
-                    behavior: "instant" as any,
-                  });
-                }
-                setIsTransitioning(false);
-              }, 200);
-            }
-          } else if (entry.target.id === "mobile-prev-trigger") {
-            if (currentIndex > 0) {
-              const prevKey = sectionKeys[currentIndex - 1];
-              setIsTransitioning(true);
-              setTimeout(() => {
-                setActiveSection(prevKey);
-                // Instantly snap to the top of services container
-                const anchor = document.getElementById("services-content-anchor");
-                if (anchor) {
-                  const offset = navbarHeight + 85;
-                  window.scrollTo({
-                    top: anchor.getBoundingClientRect().top + window.scrollY - offset,
-                    behavior: "instant" as any,
-                  });
-                }
-                setIsTransitioning(false);
-              }, 200);
-            }
-          }
-        }
-      });
-    }, observerOptions);
-
-    const nextTrigger = document.getElementById("mobile-next-trigger");
-    const prevTrigger = document.getElementById("mobile-prev-trigger");
-
-    if (nextTrigger) observer.observe(nextTrigger);
-    if (prevTrigger) observer.observe(prevTrigger);
-
-    return () => observer.disconnect();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [activeSection, isMobile, navbarHeight, isTransitioning]);
 
-  // Auto-scroll the active category pill into view on mobile/tablet
+  // Auto-scroll the active category pill into view on tablet viewports
   useEffect(() => {
+    if (isMobile) return;
     const activeChip = document.getElementById(`chip-${activeSection}`);
     const container = document.getElementById("mobile-chips-container");
     if (activeChip && container) {
@@ -297,14 +296,14 @@ export default function ServicesPage() {
         });
       }
     }
-  }, [activeSection]);
+  }, [activeSection, isMobile]);
 
   const scrollToSection = (id: SectionKey) => {
     if (isMobile) {
       if (id === activeSection) return;
-      setIsTransitioning(true);
+      lastTransitionTime.current = Date.now();
+      setActiveSection(id);
       setTimeout(() => {
-        setActiveSection(id);
         const anchor = document.getElementById("services-content-anchor");
         if (anchor) {
           const offset = navbarHeight + 85;
@@ -313,8 +312,7 @@ export default function ServicesPage() {
             behavior: "smooth",
           });
         }
-        setIsTransitioning(false);
-      }, 200);
+      }, 50);
     } else {
       setActiveSection(id);
       const element = document.getElementById(id);
@@ -478,15 +476,8 @@ export default function ServicesPage() {
             // Mobile view: Render ONLY the active category with transition animation
             (() => {
               const section = servicesData[activeSection];
-              const sectionKeys = Object.keys(servicesData) as SectionKey[];
-              const currentIndex = sectionKeys.indexOf(activeSection);
               return (
                 <div className="space-y-6">
-                  {/* Top trigger for scrolling up */}
-                  {currentIndex > 0 && (
-                    <div id="mobile-prev-trigger" className="h-2 w-full bg-transparent pointer-events-none" />
-                  )}
-
                   <div className={`transition-all duration-300 transform ${isTransitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}>
                     <AnimatedSection
                       key={activeSection}
@@ -520,11 +511,6 @@ export default function ServicesPage() {
                       </div>
                     </AnimatedSection>
                   </div>
-
-                  {/* Bottom trigger for scrolling down */}
-                  {currentIndex < sectionKeys.length - 1 && (
-                    <div id="mobile-next-trigger" className="h-6 w-full bg-transparent pointer-events-none" />
-                  )}
                 </div>
               );
             })()

@@ -273,46 +273,9 @@ const HomePage = React.memo(function HomePage() {
         }}
       />
       {/* Hero Section */}
-      <section id="hero-section" className="relative w-full overflow-hidden bg-black md:h-screen md:min-h-[600px] flex items-center pt-24 pb-12 md:pt-0 md:pb-0">
+      <section id="hero-section" className="relative h-[100dvh] w-full flex items-center overflow-hidden bg-black">
         <HeroGSAP>
-          {/* Mobile Layout: 9:16 Portrait Card (<768px) */}
-          <div className="md:hidden w-[90%] max-w-[400px] aspect-[9/16] mx-auto relative rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-white/10 flex flex-col justify-end p-8">
-            <div className="absolute inset-0 z-0 gsap-hero-image">
-              <Image
-                src={heroBgImage}
-                alt="Luxury salon interior featuring marble flooring and gold accents"
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/30" />
-            </div>
-
-            <div className="relative z-10 w-full text-center flex flex-col items-center">
-              <AnimatedHeading
-                text="Redefining Elegance"
-                className="font-display text-4xl sm:text-5xl text-3d-acrylic mb-8 leading-tight tracking-tight"
-                delay={0.5}
-              />
-
-              <div className="flex flex-col gap-4 w-full gsap-hero-content">
-                <Link to="/book" className="w-full">
-                  <SmokyButton variant="primary" as="div" className="px-6 py-4 w-full font-sans font-bold uppercase tracking-widest text-[11px]">
-                    Book Appointment
-                  </SmokyButton>
-                </Link>
-                <Link to="/services" className="w-full">
-                  <AnimatedButton variant="secondary" as="div" className="px-6 py-4 w-full font-sans font-bold uppercase tracking-widest text-[11px] border border-white/20">
-                    Our Services
-                  </AnimatedButton>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop/Tablet Layout: Full screen background (>=768px) */}
-          <div className="hidden md:block absolute inset-0 z-0 gsap-hero-image">
+          <div className="absolute inset-0 z-0 w-full h-full gsap-hero-image">
             <Image
               src={heroBgImage}
               alt="Luxury salon interior featuring marble flooring and gold accents"
@@ -321,25 +284,25 @@ const HomePage = React.memo(function HomePage() {
               sizes="100vw"
               className="object-cover object-center"
             />
-            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-black/50" />
           </div>
 
-          <div className="hidden md:flex relative z-10 px-6 md:px-16 max-w-[1440px] mx-auto w-full pt-[clamp(6.5rem,12vh,8rem)] pb-12 flex flex-col justify-center h-full">
+          <div className="relative z-10 px-6 md:px-16 max-w-[1440px] mx-auto w-full pt-[clamp(5rem,10vh,8rem)] pb-12 flex flex-col justify-center h-full">
             <div className="max-w-3xl">
               <AnimatedHeading
                 text="Redefining Elegance"
-                className="font-display text-6xl sm:text-7xl md:text-[6.5rem] text-3d-acrylic mb-8 leading-[1.1] tracking-tight"
+                className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-[6.5rem] text-3d-acrylic mb-6 md:mb-8 leading-[1.1] tracking-tight text-center md:text-left"
                 delay={0.5}
               />
 
-              <div className="flex flex-col sm:flex-row gap-6 gsap-hero-content">
-                <Link to="/book">
-                  <SmokyButton variant="primary" as="div" className="px-10 py-5 w-full sm:w-auto font-sans font-bold uppercase tracking-widest text-sm">
+              <div className="flex flex-col sm:flex-row gap-4 md:gap-6 gsap-hero-content justify-center md:justify-start">
+                <Link to="/book" className="w-full sm:w-auto">
+                  <SmokyButton variant="primary" as="div" className="px-10 py-4 sm:py-5 w-full sm:w-auto font-sans font-bold uppercase tracking-widest text-xs sm:text-sm text-center">
                     Book Appointment
                   </SmokyButton>
                 </Link>
-                <Link to="/services">
-                  <AnimatedButton variant="secondary" as="div" className="px-10 py-5 w-full sm:w-auto font-sans font-bold uppercase tracking-widest text-sm border border-white/20">
+                <Link to="/services" className="w-full sm:w-auto">
+                  <AnimatedButton variant="secondary" as="div" className="px-10 py-4 sm:py-5 w-full sm:w-auto font-sans font-bold uppercase tracking-widest text-xs sm:text-sm text-center border border-white/20">
                     Our Services
                   </AnimatedButton>
                 </Link>

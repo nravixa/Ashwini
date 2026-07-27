@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Menu, X, Calendar, ShoppingBag } from "lucide-react";
@@ -33,6 +33,8 @@ const Navbar = React.memo(function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const scrollPosRef = useRef(0);
 
   // Close mobile drawer on path change
   useEffect(() => {
@@ -73,13 +75,24 @@ const Navbar = React.memo(function Navbar() {
   // Lock body scroll + touch when mobile menu is open
   useEffect(() => {
     if (isOpen) {
+      scrollPosRef.current = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollPosRef.current}px`;
+      document.body.style.width = "100%";
       document.body.style.overflow = "hidden";
       document.body.style.touchAction = "none";
     } else {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
       document.body.style.overflow = "";
       document.body.style.touchAction = "";
+      window.scrollTo(0, scrollPosRef.current);
     }
     return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
       document.body.style.overflow = "";
       document.body.style.touchAction = "";
     };
