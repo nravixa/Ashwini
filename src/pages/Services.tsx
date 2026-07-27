@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import SEO from "../components/SEO";
 import Image from "../components/Image";
 import ServiceCard from "@/components/ServiceCard";
@@ -383,13 +384,17 @@ export default function ServicesPage() {
                 <button
                   key={key}
                   onClick={() => scrollToSection(key)}
-                  className={`relative font-sans text-xs uppercase tracking-[0.25em] transition-all duration-300 py-1 ${
+                  className={`relative font-sans text-xs uppercase tracking-[0.25em] transition-all duration-300 py-1.5 ${
                     active ? "text-rose-gold font-bold scale-105" : "text-white/60 font-normal hover:text-white"
                   }`}
                 >
                   {section.title}
                   {active && (
-                    <span className="absolute bottom-0 left-4 right-4 h-[1.5px] bg-rose-gold rounded-full shadow-[0_0_8px_rgba(240,140,174,0.8)]" />
+                    <motion.span
+                      layoutId="activeUnderline"
+                      className="absolute bottom-0 left-4 right-4 h-[1.5px] bg-rose-gold rounded-full shadow-[0_0_8px_rgba(240,140,174,0.8)]"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
                   )}
                 </button>
               );
