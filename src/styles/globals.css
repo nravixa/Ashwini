@@ -442,3 +442,11 @@ img {
   display: none !important;
 }
 
+.brand-bold {
+  font-family: var(--font-display, Italiana, serif) !important;
+  font-weight: 800 !important;
+  font-synthesis: weight !important;
+  -webkit-text-stroke: 0.6px currentColor !important;
+  text-shadow: 0.2px 0 0 currentColor, -0.2px 0 0 currentColor !important;
+}
+

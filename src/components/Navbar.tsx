@@ -109,7 +109,7 @@ const Navbar = React.memo(function Navbar() {
           <Link
             to="/"
             onClick={() => handleLinkClick("/")}
-            className="font-display text-sm sm:text-base md:text-lg font-extrabold tracking-[0.12em] sm:tracking-[0.15em] text-white uppercase shrink-0"
+            className="brand-bold text-sm sm:text-base md:text-lg tracking-[0.12em] sm:tracking-[0.15em] text-white uppercase shrink-0"
           >
             ASHWINI SALON
           </Link>
@@ -216,7 +216,7 @@ const Navbar = React.memo(function Navbar() {
         >
           {/* Header Row */}
           <div className="relative w-full flex items-center justify-center pb-6 border-b border-white/10 shrink-0">
-            <span className="font-display text-sm sm:text-base font-extrabold tracking-[0.12em] sm:tracking-[0.15em] text-white uppercase text-center">
+            <span className="brand-bold text-sm sm:text-base tracking-[0.12em] sm:tracking-[0.15em] text-white uppercase text-center">
               ASHWINI SALON
             </span>
             <button
