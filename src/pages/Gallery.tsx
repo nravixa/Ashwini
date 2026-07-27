@@ -6,6 +6,7 @@ import ImageSlider from "@/components/ImageSlider";
 import AnimatedHeading from "@/components/animations/AnimatedHeading";
 import AnimatedSection from "@/components/animations/AnimatedSection";
 import SmokyButton from "@/components/ui/SmokyButton";
+import CategoryTabs from "@/components/CategoryTabs";
 
 
 // Import local gallery images
@@ -119,29 +120,11 @@ const GalleryPage = React.memo(function GalleryPage() {
         />
 
         {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-          {categories.map((category) => {
-            const active = selectedCategory === category;
-            return (
-              <button
-                key={category}
-                onClick={() => handleCategoryChange(category)}
-                className={`relative px-6 py-2 font-sans text-xs md:text-sm uppercase tracking-widest transition-colors font-medium ${
-                  active
-                    ? "text-tertiary font-bold"
-                    : "text-white/70 hover:text-white"
-                }`}
-              >
-                {category}
-                {active && (
-                  <span
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-tertiary"
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
+        <CategoryTabs
+          categories={categories}
+          activeCategory={selectedCategory}
+          onCategoryChange={handleCategoryChange}
+        />
       </AnimatedSection>
 
       {/* Gallery Grid */}

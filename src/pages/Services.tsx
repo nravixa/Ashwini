@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
+import CategoryTabs from "@/components/CategoryTabs";
 import SEO from "../components/SEO";
 import Image from "../components/Image";
 import ServiceCard from "@/components/ServiceCard";
@@ -146,18 +147,44 @@ const servicesData = {
 
 type SectionKey = keyof typeof servicesData;
 
+const servicesCategories = [
+  "All Services",
+  "Hair Artistry",
+  "Dermal Therapy",
+  "Nail Couture",
+  "Luxury Makeup",
+  "Holistic Spa",
+];
+
+const categoryToSectionKeyMap: Record<string, SectionKey | "all"> = {
+  "All Services": "all",
+  "Hair Artistry": "hair",
+  "Dermal Therapy": "skin",
+  "Nail Couture": "nails",
+  "Luxury Makeup": "makeup",
+  "Holistic Spa": "spa",
+};
+
+const sectionKeyToCategoryMap: Record<SectionKey | "all", string> = {
+  "all": "All Services",
+  "hair": "Hair Artistry",
+  "skin": "Dermal Therapy",
+  "nails": "Nail Couture",
+  "makeup": "Luxury Makeup",
+  "spa": "Holistic Spa",
+};
+
 export default function ServicesPage() {
-  const [activeSection, setActiveSection] = useState<SectionKey | "all">("hair");
+  const [activeCategory, setActiveCategory] = useState("All Services");
   const [navbarHeight, setNavbarHeight] = useState(80);
   const [isMobile, setIsMobile] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Synchronize default category active state between mobile ("all") and desktop/tablet ("hair")
+  // Synchronize default category active state between mobile ("All Services") and desktop/tablet ("Hair Artistry")
   useEffect(() => {
     if (isMobile) {
-      setActiveSection("all");
+      setActiveCategory("All Services");
     } else {
-      setActiveSection("hair");
+      setActiveCategory("Hair Artistry");
     }
   }, [isMobile]);
 
@@ -209,9 +236,11 @@ export default function ServicesPage() {
     };
 
     const observer = new IntersectionObserver((entries) => {
+      if (window.innerWidth < 768) return;
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setActiveSection(entry.target.id as SectionKey);
+          const key = entry.target.id as SectionKey;
+          setActiveCategory(sectionKeyToCategoryMap[key]);
         }
       });
     }, observerOptions);
@@ -227,7 +256,9 @@ export default function ServicesPage() {
   // Auto-scroll the active category pill into view on tablet viewports
   useEffect(() => {
     if (isMobile) return;
-    const activeChip = document.getElementById(`chip-${activeSection}`);
+    const sectionKey = categoryToSectionKeyMap[activeCategory];
+    if (!sectionKey || sectionKey === "all") return;
+    const activeChip = document.getElementById(`chip-${sectionKey}`);
     const container = document.getElementById("mobile-chips-container");
     if (activeChip && container) {
       const containerRect = container.getBoundingClientRect();
@@ -243,40 +274,35 @@ export default function ServicesPage() {
         });
       }
     }
-  }, [activeSection, isMobile]);
+  }, [activeCategory, isMobile]);
 
-  const scrollToSection = (id: SectionKey | "all") => {
-    if (isMobile) {
-      if (id === activeSection) return;
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setActiveSection(id);
-        const anchor = document.getElementById("services-content-anchor");
-        if (anchor) {
-          const offset = navbarHeight + 85;
+  const handleCategoryChange = useCallback((category: string) => {
+    setActiveCategory(category);
+    
+    // Only scroll to section on desktop/tablet (width >= 768px)
+    const isMobileViewport = window.innerWidth < 768;
+    if (!isMobileViewport) {
+      const sectionKey = categoryToSectionKeyMap[category];
+      if (sectionKey && sectionKey !== "all") {
+        const element = document.getElementById(sectionKey);
+        if (element) {
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = element.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - (navbarHeight + 40);
+
           window.scrollTo({
-            top: anchor.getBoundingClientRect().top + window.scrollY - offset,
+            top: offsetPosition,
             behavior: "smooth",
           });
         }
-        setIsTransitioning(false);
-      }, 250);
-    } else {
-      if (id === "all") return;
-      setActiveSection(id);
-      const element = document.getElementById(id);
-      if (element) {
-        const bodyRect = document.body.getBoundingClientRect().top;
-        const elementRect = element.getBoundingClientRect().top;
-        const elementPosition = elementRect - bodyRect;
-        const offsetPosition = elementPosition - (navbarHeight + 40);
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth",
-        });
       }
     }
+  }, [navbarHeight]);
+
+  const scrollToSection = (key: SectionKey) => {
+    const category = sectionKeyToCategoryMap[key];
+    handleCategoryChange(category);
   };
 
   return (
@@ -323,47 +349,13 @@ export default function ServicesPage() {
           className="w-full lg:hidden sticky z-30 bg-background/95 backdrop-blur-md border-b border-white/10 mb-6"
           style={{ top: `${navbarHeight}px` }}
         >
-          {/* Mobile view (<768px): Vertical centered list with generous spacing */}
-          <div className="md:hidden flex flex-col items-center justify-center gap-4 py-6">
-            {/* All Services button */}
-            <button
-              onClick={() => scrollToSection("all")}
-              className={`relative font-sans text-xs uppercase tracking-[0.25em] transition-all duration-300 py-1.5 ${
-                activeSection === "all" ? "text-rose-gold font-bold scale-105" : "text-white/60 font-normal hover:text-white"
-              }`}
-            >
-              All Services
-              {activeSection === "all" && (
-                <motion.span
-                  layoutId="activeUnderline"
-                  className="absolute bottom-0 left-4 right-4 h-[1.5px] bg-rose-gold rounded-full shadow-[0_0_8px_rgba(240,140,174,0.8)]"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
-            </button>
-
-            {(Object.keys(servicesData) as SectionKey[]).map((key) => {
-              const active = activeSection === key;
-              const section = servicesData[key];
-              return (
-                <button
-                  key={key}
-                  onClick={() => scrollToSection(key)}
-                  className={`relative font-sans text-xs uppercase tracking-[0.25em] transition-all duration-300 py-1.5 ${
-                    active ? "text-rose-gold font-bold scale-105" : "text-white/60 font-normal hover:text-white"
-                  }`}
-                >
-                  {section.title}
-                  {active && (
-                    <motion.span
-                      layoutId="activeUnderline"
-                      className="absolute bottom-0 left-4 right-4 h-[1.5px] bg-rose-gold rounded-full shadow-[0_0_8px_rgba(240,140,174,0.8)]"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </button>
-              );
-            })}
+          {/* Mobile view (<768px): Centered category tabs identical to Gallery */}
+          <div className="md:hidden py-4">
+            <CategoryTabs
+              categories={servicesCategories}
+              activeCategory={activeCategory}
+              onCategoryChange={handleCategoryChange}
+            />
           </div>
 
           {/* Tablet view (768px - 1023px): Horizontal chips as before */}
@@ -372,7 +364,7 @@ export default function ServicesPage() {
             className="hidden md:flex glass-card p-1.5 flex-row overflow-x-auto gap-1.5 no-scrollbar w-full scroll-smooth my-3"
           >
             {(Object.keys(servicesData) as SectionKey[]).map((key) => {
-              const active = activeSection === key;
+              const active = activeCategory === sectionKeyToCategoryMap[key];
               const section = servicesData[key];
               return (
                 <button
@@ -407,7 +399,7 @@ export default function ServicesPage() {
                 </p>
               </div>
               {(Object.keys(servicesData) as SectionKey[]).map((key) => {
-                const active = activeSection === key;
+                const active = activeCategory === sectionKeyToCategoryMap[key] || (activeCategory === "All Services" && key === "hair");
                 const section = servicesData[key];
                 return (
                   <button
@@ -442,90 +434,44 @@ export default function ServicesPage() {
 
         {/* Main Services Content Area (Right Side - Mobile, Tablet, Desktop) */}
         <div id="services-content-anchor" className="flex-1 min-w-0 space-y-10 sm:space-y-16 lg:space-y-24">
-          {isMobile ? (
-            // Mobile view: Render active category or all categories
-            <div className="space-y-12">
-              <div className={`transition-all duration-300 transform ${isTransitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}>
-                {(Object.keys(servicesData) as SectionKey[]).map((key) => {
-                  const show = activeSection === "all" || activeSection === key;
-                  if (!show) return null;
-                  const section = servicesData[key];
-                  return (
-                    <AnimatedSection
-                      key={key}
-                      id={key}
-                      style={{ scrollMarginTop: `${navbarHeight + 75}px` }}
-                      className="mb-10 last:mb-0"
-                    >
-                      <div className="flex items-baseline gap-4 mb-6 sm:mb-8 border-b border-outline-variant/10 pb-2 sm:pb-3">
-                        <AnimatedHeading
-                          text={section.title}
-                          as="h2"
-                          className="font-display text-xl sm:text-2xl md:text-4xl font-medium text-white"
-                        />
-                        <span className="text-white/70 font-sans text-xs md:text-sm tracking-wider font-semibold">
-                          {section.indexLabel}
-                        </span>
-                      </div>
+          {(Object.keys(servicesData) as SectionKey[]).map((key) => {
+            const section = servicesData[key];
+            const isSelected = activeCategory === "All Services" || activeCategory === sectionKeyToCategoryMap[key];
+            return (
+              <AnimatedSection
+                key={key}
+                id={key}
+                style={{ scrollMarginTop: `${navbarHeight + 40}px` }}
+                className={`mb-10 last:mb-0 ${isSelected ? "block" : "hidden md:block"}`}
+              >
+                <div className="flex items-baseline gap-4 mb-6 sm:mb-8 border-b border-outline-variant/10 pb-2 sm:pb-3">
+                  <AnimatedHeading
+                    text={section.title}
+                    as="h2"
+                    className="font-display text-xl sm:text-2xl md:text-4xl font-medium text-white"
+                  />
+                  <span className="text-white/70 font-sans text-xs md:text-sm tracking-wider font-semibold">
+                    {section.indexLabel}
+                  </span>
+                </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 content-auto contain-strict">
-                        {section.items.map((item, idx) => (
-                          <ServiceCard
-                            key={idx}
-                            title={item.title}
-                            description={item.description}
-                            imageUrl={item.imageUrl}
-                            duration={item.duration}
-                            price={item.price}
-                            category={section.title}
-                            index={idx}
-                          />
-                        ))}
-                      </div>
-                    </AnimatedSection>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            // Desktop/Tablet view: Render all categories
-            (Object.keys(servicesData) as SectionKey[]).map((key) => {
-              const section = servicesData[key];
-              return (
-                <AnimatedSection
-                  key={key}
-                  id={key}
-                  style={{ scrollMarginTop: `${navbarHeight + 40}px` }}
-                >
-                  <div className="flex items-baseline gap-4 mb-6 sm:mb-8 border-b border-outline-variant/10 pb-2 sm:pb-3">
-                    <AnimatedHeading
-                      text={section.title}
-                      as="h2"
-                      className="font-display text-xl sm:text-2xl md:text-4xl font-medium text-white"
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 content-auto contain-strict">
+                  {section.items.map((item, idx) => (
+                    <ServiceCard
+                      key={idx}
+                      title={item.title}
+                      description={item.description}
+                      imageUrl={item.imageUrl}
+                      duration={item.duration}
+                      price={item.price}
+                      category={section.title}
+                      index={idx}
                     />
-                    <span className="text-white/70 font-sans text-xs md:text-sm tracking-wider font-semibold">
-                      {section.indexLabel}
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 content-auto contain-strict">
-                    {section.items.map((item, idx) => (
-                      <ServiceCard
-                        key={idx}
-                        title={item.title}
-                        description={item.description}
-                        imageUrl={item.imageUrl}
-                        duration={item.duration}
-                        price={item.price}
-                        category={section.title}
-                        index={idx}
-                      />
-                    ))}
-                  </div>
-                </AnimatedSection>
-              );
-            })
-          )}
+                  ))}
+                </div>
+              </AnimatedSection>
+            );
+          })}
         </div>
       </div>
 
